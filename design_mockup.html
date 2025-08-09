@@ -1,0 +1,3048 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIA 통합 디자인 시스템 가이드 (전체)</title>
+    <!-- Google Fonts (Noto Sans KR) 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Hugeicons CDN 로드 -->
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <style>
+        /* --- CSS 변수 정의 (LIA 디자인 시스템) --- */
+        :root {
+            /* Brand & Accent Colors */
+            --primary: #FF70A6;
+            --accent: #A162F7;
+            --yellow: #FFD670;
+
+            /* Light Mode Colors */
+            --text-primary-light: #1A1A1A;
+            --text-secondary-light: #3A3A3A;
+            --text-tertiary-light: #718096;
+            --background-color-light: #f8f9fa;
+            --surface-light: #FFFFFF;
+            --border-color-light: #e9ecef;
+            --light-gray-light: #F1F3F5;
+            --card-bg-pink-light: #FFF8FB;
+            --card-bg-purple-light: #F6F0FF;
+
+            /* Dark Mode Colors */
+            --text-primary-dark: #f8f9fa;
+            --text-secondary-dark: #adb5bd;
+            --text-tertiary-dark: #718096;
+            --background-color-dark: #121212;
+            --surface-dark: #1E1E1E;
+            --border-color-dark: #343a40;
+            --light-gray-dark: #2c2c2e;
+            --card-bg-pink-dark: #38242c;
+            --card-bg-purple-dark: #2c253a;
+
+            /* Gradients */
+            --primary-gradient: linear-gradient(to right, #FF70A6, #A162F7);
+            --accent-gradient: linear-gradient(to right, #A162F7, #B681F8);
+
+            /* Status Colors */
+            --success: #28a745;
+            --error: #dc3545;
+        }
+
+        /* --- 기본 스타일 (라이트 모드 기본값) --- */
+        body {
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --text-tertiary: var(--text-tertiary-light);
+            --background-color: var(--background-color-light);
+            --surface: var(--surface-light);
+            --border-color: var(--border-color-light);
+            --light-gray: var(--light-gray-light);
+            --card-bg-pink: var(--card-bg-pink-light);
+            --card-bg-purple: var(--card-bg-purple-light);
+
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 1.5rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- 다크 모드 스타일 --- */
+        body.dark-mode {
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --text-tertiary: var(--text-tertiary-dark);
+            --background-color: var(--background-color-dark);
+            --surface: var(--surface-dark);
+            --border-color: var(--border-color-dark);
+            --light-gray: var(--light-gray-dark);
+            --card-bg-pink: var(--card-bg-pink-dark);
+            --card-bg-purple: var(--card-bg-purple-dark);
+        }
+
+        .container {
+            max-width: 64rem;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.25rem;
+            font-weight: 900;
+            color: var(--text-primary);
+        }
+
+        header h1 .highlight {
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* --- 컴포넌트 섹션 --- */
+        .component-section {
+            background-color: var(--surface);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-color);
+            margin-bottom: 2rem;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .component-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .component-subtitle {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* --- 그리드 시스템 --- */
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-cols-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-cols-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 768px) {
+
+            .grid-cols-3,
+            .grid-cols-4 {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+
+            .grid-cols-2,
+            .grid-cols-3,
+            .grid-cols-4 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- 색상 팔레트 --- */
+        .color-box {
+            width: 100%;
+            height: 6rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .color-box-label {
+            margin-top: 0.5rem;
+            font-weight: 500;
+        }
+
+        .color-box-value {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        /* --- 타이포그래피 --- */
+        .typography-showcase>div {
+            margin: 0.75rem 0;
+            padding: 0.5rem;
+            border-left: 3px solid var(--border-color);
+        }
+
+        .font-weight-showcase {
+            font-size: 1.2rem;
+        }
+
+        .h1-title {
+            font-size: 1.875rem;
+            font-weight: 900;
+        }
+
+        .h2-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .h3-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .body-text {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .caption-text {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .small-text {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        /* --- 버튼 & 탭 --- */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid transparent;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            font-size: 1rem;
+        }
+
+        .btn i {
+            font-size: 1.25rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            filter: brightness(1.1);
+            box-shadow: 0 4px 15px rgba(255, 112, 166, 0.4);
+        }
+
+        .btn-gradient {
+            background-image: var(--primary-gradient);
+            color: white;
+            background-size: 200% auto;
+        }
+
+        .btn-gradient:hover {
+            background-position: right center;
+            box-shadow: 0 4px 15px rgba(255, 112, 166, 0.4);
+        }
+
+        .btn-secondary {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            border-color: var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--background-color);
+        }
+
+        .btn:active {
+            transform: scale(0.97);
+            filter: brightness(0.95);
+        }
+
+        .tab-menu {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+        }
+
+        .tab-menu::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tab-menu {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .tab-item {
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            background-color: var(--light-gray);
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            font-weight: 500;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s, background-color 0.3s, color 0.3s;
+        }
+
+        .tab-item.active {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .suggestion-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .chip {
+            background-color: var(--surface);
+            color: var(--primary);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 700;
+            border: 1px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .chip:hover {
+            background-color: var(--card-bg-pink);
+        }
+
+        /* [UPDATE] 일관된 클릭/탭 인터랙션 효과 */
+        .clickable-card:active,
+        .chip:active,
+        .tab-item:active,
+        .guide-item:active,
+        .list-item:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        /* --- 네비게이션 --- */
+        .mobile-frame {
+            max-width: 420px;
+            margin: 1rem auto;
+            border: 8px solid #333;
+            border-radius: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            position: relative;
+            background-color: var(--surface);
+            overflow: hidden;
+            transition: background-color 0.3s;
+        }
+
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+            position: relative;
+        }
+
+        .nav-location {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 1.125rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .nav-actions .icon {
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+        }
+
+        .top-nav-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .top-nav .action-btn {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        .bottom-nav-wrapper {
+            position: relative;
+            height: 80px;
+        }
+
+        .bottom-nav-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--surface);
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .nav-item-group {
+            display: flex;
+            justify-content: space-around;
+            flex: 1;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            flex: 1;
+            /* 5-item nav를 위한 추가 */
+        }
+
+        .nav-item .icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-item.active .icon,
+        .nav-item.active span {
+            color: var(--primary);
+        }
+
+        .nav-cta-placeholder {
+            width: 72px;
+            flex-shrink: 0;
+        }
+
+        .nav-cta-button {
+            position: absolute;
+            left: 50%;
+            top: -25px;
+            transform: translateX(-50%);
+            width: 4rem;
+            height: 4rem;
+            background-image: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(255, 112, 166, 0.4);
+            color: white;
+            cursor: pointer;
+        }
+
+        .nav-cta-button .icon {
+            font-size: 1.75rem;
+        }
+
+        /* --- 카드 (버튼 기능 포함) --- */
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .clickable-card {
+            cursor: pointer;
+            transition: transform 0.2s, filter 0.2s;
+        }
+
+        .hero-banner {
+            background-color: var(--card-bg-purple);
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s;
+        }
+
+        .hero-banner p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .hero-banner h3 {
+            margin: 0.25rem 0 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .action-card {
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+        }
+
+        .action-card h3 {
+            margin: 0 0 0.25rem;
+            font-size: 1.25rem;
+        }
+
+        .action-card p {
+            margin: 0;
+            font-size: 0.875rem;
+            opacity: 0.9;
+        }
+
+        .action-card .icon {
+            font-size: 2.5rem;
+            align-self: flex-end;
+        }
+
+        .action-card.primary {
+            background-image: var(--primary-gradient);
+        }
+
+        .action-card.secondary {
+            background-color: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .action-card.secondary .icon {
+            color: var(--accent);
+        }
+
+        .strategy-card {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            border-radius: 0.75rem;
+            background-color: var(--card-bg-purple);
+            justify-content: space-between;
+            transition: background-color 0.3s;
+        }
+
+        .strategy-card h3 {
+            margin: 0 0 0.25rem;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .strategy-card p {
+            margin: 0;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .strategy-card .icon {
+            font-size: 1.25rem;
+            color: var(--text-tertiary);
+            align-self: flex-end;
+        }
+
+        .content-card {
+            border-radius: 0.75rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .content-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .content-info {
+            padding: 1rem;
+            position: relative;
+            background-color: var(--surface);
+            transition: background-color 0.3s;
+        }
+
+        .content-info h3 {
+            margin: 0;
+            font-size: 1.125rem;
+        }
+
+        .content-info .badge {
+            background-color: var(--accent);
+            color: white;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.75rem;
+            border-radius: 4px;
+            position: absolute;
+            top: -12px;
+        }
+
+        .content-info .icon {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+        }
+
+        .profile-card {
+            background-color: var(--card-bg-pink);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode .profile-card {
+            background-color: var(--card-bg-pink-dark);
+        }
+
+        .profile-card.partner {
+            background-color: var(--card-bg-purple);
+        }
+
+        body.dark-mode .profile-card.partner {
+            background-color: var(--card-bg-purple-dark);
+        }
+
+        .profile-info {
+            flex-grow: 1;
+        }
+
+        .profile-info h3 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .profile-tags {
+            margin-top: 0.25rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .profile-card .change-btn {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+        }
+
+        .analysis-card {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+
+        .analysis-card .title {
+            font-weight: 700;
+            font-size: 1.125rem;
+            margin: 0 0 1.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .analysis-card .title .icon {
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+
+        .cta-card {
+            background-color: var(--card-bg-purple);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+            transition: background-color 0.3s;
+        }
+
+        .cta-card p {
+            margin: 0 0 1rem 0;
+            font-weight: 500;
+        }
+
+        /* --- 아이콘 버튼 --- */
+        .usage-guide-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            justify-items: center;
+        }
+
+        .guide-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .guide-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .guide-icon-wrapper {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+        }
+
+        .guide-icon-wrapper:hover {
+            filter: brightness(0.95);
+        }
+
+        .guide-icon-wrapper:active {
+            transform: scale(0.95);
+            filter: brightness(0.9);
+        }
+
+        .guide-icon-wrapper .icon {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- 입력 필드 --- */
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper .icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-tertiary);
+            font-size: 1.25rem;
+        }
+
+        .input-field,
+        .textarea-field {
+            width: 100%;
+            background-color: var(--light-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+            color: var(--text-primary);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .input-field {
+            padding: 0.875rem 1rem 0.875rem 3.25rem;
+        }
+
+        .textarea-field {
+            padding: 0.875rem 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .input-field:focus,
+        .textarea-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 112, 166, 0.2);
+        }
+
+        /* --- 리스트 뷰 --- */
+        .list-view>.list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.3s, transform 0.2s, filter 0.2s;
+        }
+
+        .list-view>.list-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .list-view>.list-item:first-child {
+            padding-top: 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .list-view>.list-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .list-item .icon {
+            font-size: 1rem;
+            color: var(--text-tertiary);
+        }
+
+        /* --- 모달 & 팝업 --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            z-index: 1000;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--surface);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 24rem;
+            transform: scale(0.95);
+            transition: transform 0.3s, background-color 0.3s;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-content h3 {
+            font-size: 1.125rem;
+            text-align: center;
+            margin: 0;
+        }
+
+        .modal-content p {
+            text-align: center;
+            color: var(--text-tertiary);
+            margin: 0.5rem 0 0;
+        }
+
+        .modal-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .bottom-sheet {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--surface);
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+            padding: 1.5rem;
+            transform: translateY(100%);
+            transition: transform 0.3s, background-color 0.3s;
+            width: 100%;
+            max-width: 420px;
+            margin: 0 auto;
+            box-sizing: border-box;
+        }
+
+        .modal-overlay.open .bottom-sheet {
+            transform: translateY(0);
+        }
+
+        .bottom-sheet h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        .bottom-sheet .permission-list {
+            margin: 1.5rem 0;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .permission-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .permission-item .icon {
+            font-size: 1.75rem;
+            color: var(--text-primary);
+        }
+
+        .permission-info {
+            margin-left: 1rem;
+        }
+
+        .permission-info p {
+            margin: 0;
+            text-align: left;
+        }
+
+        .permission-info .title {
+            font-weight: 500;
+        }
+
+        .permission-info .description {
+            font-size: 0.875rem;
+        }
+
+        .bottom-sheet .btn {
+            width: 100%;
+            margin-top: 1.5rem;
+        }
+
+        /* --- 차트 --- */
+        .chart-grid-wrapper {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-rows: 1fr auto;
+            height: 220px;
+        }
+
+        .y-axis {
+            grid-column: 1;
+            grid-row: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding-right: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            text-align: right;
+            border-right: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .bar-chart-container {
+            grid-column: 2;
+            grid-row: 1;
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            padding: 0 0.5rem;
+        }
+
+        .bar-chart-item {
+            width: 12%;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+            position: relative;
+        }
+
+        .bar {
+            width: 100%;
+            background-color: var(--primary);
+            border-radius: 4px 4px 0 0;
+            animation: bar-grow 1s ease-out;
+            transition: background-color 0.2s;
+        }
+
+        .bar-chart-item:hover .bar {
+            background-color: var(--accent);
+        }
+
+        .x-axis-labels {
+            grid-column: 2;
+            grid-row: 2;
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0.5rem 0;
+            border-top: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .bar-label {
+            width: 12%;
+            text-align: center;
+            font-size: 0.75rem;
+        }
+
+        .bar-tooltip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            top: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--text-primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            transition: opacity 0.2s;
+            z-index: 10;
+        }
+
+        .bar-chart-item:hover .bar-tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @keyframes bar-grow {
+            from {
+                height: 0;
+            }
+        }
+
+        /* [FIX & UPDATE] Doughnut Chart Styles */
+        .doughnut-chart-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .doughnut-chart-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .doughnut-chart {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+
+        .doughnut-chart.legend-style {
+            background: conic-gradient(var(--primary) 0% 50%, var(--accent) 50% 75%, var(--yellow) 75% 100%);
+        }
+
+        .doughnut-chart.score-style {
+            background: conic-gradient(var(--primary) 0% 82%, var(--light-gray) 82% 100%);
+        }
+
+        .doughnut-chart-center {
+            position: absolute;
+            background: var(--surface);
+            border-radius: 50%;
+            transition: background-color 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .doughnut-chart-center.legend-style {
+            width: 90px;
+            height: 90px;
+        }
+
+        .doughnut-chart-center.score-style {
+            width: 110px;
+            height: 110px;
+        }
+
+        .chart-legend {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        .chart-score {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .chart-label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-tertiary);
+        }
+
+        /* --- 프로그레스 & 스텝퍼 --- */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+            transition: background-color 0.3s;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 4px;
+            transition: width 0.4s ease;
+        }
+
+        /* --- 아코디언 --- */
+        .accordion-item {
+            border-bottom: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .accordion-item.first-of-type {
+            border-top: 1px solid var(--border-color);
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .accordion-header .icon {
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.open .accordion-header .icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, color 0.3s;
+            padding: 0;
+        }
+
+        .accordion-content p {
+            padding: 0 0 1rem 0;
+            margin: 0;
+            color: var(--text-secondary);
+        }
+
+        /* --- 스켈레톤 로더 --- */
+        .skeleton-loader {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .skeleton {
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            animation: skeleton-pulse 1.5s infinite ease-in-out;
+        }
+
+        .skeleton-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+        }
+
+        .skeleton-text {
+            height: 16px;
+        }
+
+        .skeleton-text-short {
+            width: 60%;
+        }
+
+        @keyframes skeleton-pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.6;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        /* --- UI & Interactive Elements --- */
+        .alert {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .alert .icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .alert-success {
+            background-color: var(--card-bg-pink);
+            color: #B35276;
+        }
+
+        body.dark-mode .alert-success {
+            color: #ffb3cc;
+        }
+
+        .alert-success .icon {
+            color: var(--primary);
+        }
+
+        .alert-danger {
+            background-color: var(--card-bg-purple);
+            color: #7A49C3;
+        }
+
+        body.dark-mode .alert-danger {
+            color: #d1b3ff;
+        }
+
+        .alert-danger .icon {
+            color: var(--accent);
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            background-color: var(--surface);
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+
+        .dropdown-menu a {
+            color: var(--text-primary);
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--light-gray);
+        }
+
+        .dropdown.show .dropdown-menu {
+            display: block;
+        }
+
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 140px;
+            background-color: var(--text-primary-dark);
+            color: #fff;
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px 0;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -70px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--text-primary-dark) transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .data-table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .data-table th {
+            background-color: var(--light-gray);
+            font-weight: 700;
+            transition: background-color 0.3s;
+        }
+
+        .data-table tbody tr:hover {
+            background-color: var(--background-color);
+        }
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .avatar {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--surface);
+        }
+
+        .avatar.bordered {
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .avatar-sm {
+            width: 2.5rem;
+            height: 2.5rem;
+        }
+
+        .avatar-md {
+            width: 3.5rem;
+            height: 3.5rem;
+        }
+
+        .avatar-lg {
+            width: 6rem;
+            height: 6rem;
+        }
+
+        .status-dot {
+            position: absolute;
+            bottom: 5%;
+            right: 5%;
+            width: 12px;
+            height: 12px;
+            background-color: var(--success);
+            border-radius: 50%;
+            border: 2px solid var(--surface);
+        }
+
+        .status-dot.offline {
+            background-color: var(--text-tertiary);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.75rem;
+            font-weight: 700;
+            border-radius: 9999px;
+            line-height: 1.2;
+        }
+
+        .badge-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .badge-accent {
+            background-color: var(--accent);
+            color: white;
+        }
+
+        .badge-light {
+            background-color: var(--light-gray);
+            color: var(--text-primary);
+        }
+
+        .toggle-switch-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            max-width: 200px;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 52px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--border-color);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        input:checked+.toggle-slider {
+            background-color: var(--primary);
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(20px);
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-width: 300px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .slider-value {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: var(--light-gray);
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            cursor: pointer;
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* --- Advanced Layout & State Components --- */
+        .calendar-container {
+            max-width: 350px;
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            background-color: var(--surface);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-header .icon {
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .calendar-header .icon:hover {
+            background-color: var(--light-gray);
+        }
+
+        .calendar-month-year {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .calendar-day {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .calendar-day.day-name {
+            font-weight: 700;
+            color: var(--text-tertiary);
+            cursor: default;
+        }
+
+        .calendar-day.other-month {
+            color: var(--border-color);
+        }
+
+        .calendar-day.today {
+            background-color: var(--card-bg-pink);
+            color: var(--primary);
+        }
+
+        .calendar-day.selected {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .calendar-day:not(.day-name):not(.other-month):hover {
+            background-color: var(--light-gray);
+        }
+
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .page-item {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.3s;
+        }
+
+        .page-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .page-item.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .page-item.disabled {
+            color: var(--border-color);
+            cursor: not-allowed;
+            background-color: var(--light-gray);
+        }
+
+        .stepper {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            position: relative;
+        }
+
+        .stepper-line {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            height: 2px;
+            background-color: var(--border-color);
+            transform: translateY(-50%);
+            z-index: 1;
+            transition: background-color 0.3s;
+        }
+
+        .stepper-progress {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            height: 2px;
+            background-color: var(--primary);
+            transform: translateY(-50%);
+            z-index: 2;
+            transition: width 0.4s ease;
+        }
+
+        .step-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 3;
+            text-align: center;
+            width: 80px;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--surface);
+            border: 2px solid var(--border-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            transition: all 0.4s ease;
+        }
+
+        .step-item.completed .step-circle {
+            background-color: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .step-item.active .step-circle {
+            border-color: var(--primary);
+            color: var(--text-primary);
+        }
+
+        .step-label {
+            margin-top: 0.5rem;
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+        }
+
+        .step-item.active .step-label,
+        .step-item.completed .step-label {
+            color: var(--text-primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--light-gray);
+            border-radius: 0.75rem;
+            transition: background-color 0.3s;
+        }
+
+        .empty-state .icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            margin: 0 0 0.5rem;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            margin: 0 0 1.5rem;
+        }
+
+        /* --- Chat UI Components --- */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+            padding: 1.5rem;
+            background-color: var(--background-color);
+            border-radius: 0.75rem;
+        }
+
+        .system-message {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            margin-bottom: 0.5rem;
+        }
+
+        .system-message .icon {
+            font-size: 0.8rem;
+            vertical-align: middle;
+        }
+
+        .chat-bubble {
+            display: flex;
+            gap: 0.75rem;
+            max-width: 90%;
+            align-self: flex-start;
+        }
+
+        .bot-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bot-avatar .icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        .bubble-content {
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 1.25rem;
+            padding: 1rem;
+            transition: all 0.3s;
+        }
+
+        .bubble-content h2 {
+            font-size: 1.25rem;
+            margin: 0 0 0.25rem;
+        }
+
+        .bubble-content p {
+            margin: 0 0 1rem;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .faq-list .faq-item {
+            background-color: var(--light-gray);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .faq-list .faq-item:not(:last-child) {
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-list .faq-item:hover {
+            filter: brightness(0.95);
+        }
+
+        .faq-title {
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .input-footer {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+            padding: 0.75rem;
+            border-radius: 0.75rem;
+            background-color: var(--background-color);
+        }
+
+        .input-footer .icon-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--light-gray);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .input-footer .icon-btn:hover {
+            filter: brightness(0.95);
+        }
+
+        .input-footer .icon {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+        }
+
+        .text-input-wrapper {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .text-input {
+            width: 100%;
+            background-color: var(--light-gray);
+            border: 1px solid var(--light-gray);
+            border-radius: 999px;
+            padding: 0.625rem 2.5rem 0.625rem 1rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: var(--surface);
+        }
+
+        .send-btn {
+            position: absolute;
+            right: 4px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 32px;
+            background-image: var(--primary-gradient);
+            color: white;
+        }
+
+        .send-btn .icon {
+            color: white;
+        }
+
+        /* --- App Layout & Page Specific Components --- */
+        .ad-banner {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 0.75rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+            border-radius: 0.5rem;
+        }
+
+        .sticky-footer {
+            padding: 1rem 1.5rem;
+            background-color: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+        }
+
+        .sticky-footer .btn {
+            width: 100%;
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.75rem;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .section-divider {
+            height: 8px;
+            background-color: var(--background-color);
+            margin: 2rem 0;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .bot-intro {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .bot-intro .bot-avatar {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 0.75rem;
+        }
+
+        .bot-intro .bot-avatar .icon {
+            font-size: 2.5rem;
+        }
+
+        .bot-intro h2 {
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0;
+        }
+
+        .bot-intro p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0.25rem 0 0;
+        }
+
+        .summary-grid {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-grid .doughnut-chart-container {
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+        }
+
+        .summary-grid .doughnut-chart-center {
+            width: 70px;
+            height: 70px;
+        }
+
+        .summary-grid .chart-score {
+            font-size: 1.5rem;
+        }
+
+        .summary-text p {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .summary-text .highlight {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .keyword-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .keyword-tags .tag {
+            background-color: var(--light-gray);
+            color: var(--text-secondary);
+            padding: 0.375rem 0.875rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        /* --- 다크 모드 토글 --- */
+        .theme-switcher {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            background-color: var(--surface);
+            padding: 0.5rem;
+            border-radius: 9999px;
+            border: 1px solid var(--border-color);
+            z-index: 1001;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="theme-switcher">
+        <i class="icon hgi-stroke hgi-sun"></i>
+        <label class="toggle-switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="toggle-slider"></span>
+        </label>
+        <i class="icon hgi-stroke hgi-moon"></i>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>LIA <span class="highlight">통합 디자인 시스템</span></h1>
+            <p>사용자와 상대방의 특성을 고려한 맞춤형 메시지 생성 서비스</p>
+        </header>
+
+        <!-- Color & Typography -->
+        <section class="component-section">
+            <h2 class="component-title">Brand Identity</h2>
+            <h3 class="component-subtitle">Brand & Accent Colors</h3>
+            <div class="grid grid-cols-4">
+                <div>
+                    <div class="color-box" style="background-color: var(--primary);"></div>
+                    <p class="color-box-label">Primary</p>
+                    <p class="color-box-value">#FF70A6</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--accent);"></div>
+                    <p class="color-box-label">Accent</p>
+                    <p class="color-box-value">#A162F7</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--yellow);"></div>
+                    <p class="color-box-label">Yellow</p>
+                    <p class="color-box-value">#FFD670</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background: var(--primary-gradient);"></div>
+                    <p class="color-box-label">Primary Gradient</p>
+                </div>
+            </div>
+            <h3 class="component-subtitle">Neutral & Greyscale Colors</h3>
+            <div class="grid grid-cols-4">
+                <div>
+                    <div class="color-box" style="background-color: var(--text-primary-light);"></div>
+                    <p class="color-box-label">Text Primary</p>
+                    <p class="color-box-value">#1A1A1A</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--text-secondary-light);"></div>
+                    <p class="color-box-label">Text Secondary</p>
+                    <p class="color-box-value">#3A3A3A</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--text-tertiary-light);"></div>
+                    <p class="color-box-label">Text Tertiary</p>
+                    <p class="color-box-value">#718096</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--surface-light);"></div>
+                    <p class="color-box-label">Surface</p>
+                    <p class="color-box-value">#FFFFFF</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--light-gray-light);"></div>
+                    <p class="color-box-label">Light Gray</p>
+                    <p class="color-box-value">#F1F3F5</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--border-color-light);"></div>
+                    <p class="color-box-label">Border</p>
+                    <p class="color-box-value">#e9ecef</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--background-color-light);"></div>
+                    <p class="color-box-label">Background</p>
+                    <p class="color-box-value">#f8f9fa</p>
+                </div>
+            </div>
+            <h3 class="component-subtitle">Status Colors</h3>
+            <div class="grid grid-cols-4">
+                <div>
+                    <div class="color-box" style="background-color: var(--success);"></div>
+                    <p class="color-box-label">Success</p>
+                    <p class="color-box-value">#28a745</p>
+                </div>
+                <div>
+                    <div class="color-box" style="background-color: var(--error);"></div>
+                    <p class="color-box-label">Error</p>
+                    <p class="color-box-value">#dc3545</p>
+                </div>
+            </div>
+            <h3 class="component-subtitle">Typography</h3>
+            <div class="typography-showcase">
+                <div>
+                    <p class="h1-title">H1 Title: AI로 만드는 설레는 대화</p>
+                    <p class="h2-title">H2 Title: 이럴 때도 LIA! 200% 활용하기</p>
+                    <p class="h3-title">H3 Title: 상황별 대화 전략</p>
+                    <p class="body-text">Body Text: 사용자는 간단한 정보 입력으로 상황과 감정에 맞는 최적화된 메시지를 얻을 수 있습니다.</p>
+                    <p class="caption-text">Caption Text: 일상 속 다양한 상황! 어떻게 말해야 할지 고민이라면?</p>
+                    <p class="small-text">Small Text: 이용가이드</p>
+                </div>
+            </div>
+            <h3 class="component-subtitle">Font Weights</h3>
+            <div class="typography-showcase">
+                <div>
+                    <p class="font-weight-showcase" style="font-weight: 400;">Noto Sans KR Regular (400)</p>
+                    <p class="font-weight-showcase" style="font-weight: 500;">Noto Sans KR Medium (500)</p>
+                    <p class="font-weight-showcase" style="font-weight: 700;">Noto Sans KR Bold (700)</p>
+                    <p class="font-weight-showcase" style="font-weight: 900;">Noto Sans KR Black (900)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Navigation -->
+        <section class="component-section">
+            <h2 class="component-title">Navigation Elements</h2>
+            <p class="body-text">앱의 핵심 네비게이션 컴포넌트입니다. 모바일 프레임 안에서 실제 앱과 동일한 모습을 확인할 수 있습니다.</p>
+            <h3 class="component-subtitle">Top Navigation Bar</h3>
+            <div class="grid grid-cols-2">
+                <div>
+                    <strong>기본 (위치 + 액션)</strong>
+                    <nav class="top-nav" style="margin-top: 0.5rem;">
+                        <div class="nav-location"><strong>내 프로필</strong><i
+                                class="icon hgi-stroke hgi-arrow-down-02"></i>
+                        </div>
+                        <div class="nav-actions"><i class="icon hgi-stroke hgi-search"></i><i
+                                class="icon hgi-stroke hgi-notification-02"></i></div>
+                    </nav>
+                </div>
+                <div>
+                    <strong>중앙 타이틀</strong>
+                    <nav class="top-nav" style="margin-top: 0.5rem;">
+                        <i class="icon hgi-stroke hgi-arrow-left-02"></i>
+                        <h1 class="top-nav-title">페이지 타이틀</h1>
+                        <button class="action-btn">액션</button>
+                    </nav>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Bottom Navigation Bar</h3>
+            <div class="grid grid-cols-2">
+                <div>
+                    <strong>중앙 CTA 버튼 타입</strong>
+                    <div class="mobile-frame" style="height: 120px;">
+                        <div class="bottom-nav-wrapper">
+                            <nav class="bottom-nav-bar">
+                                <div class="nav-item-group">
+                                    <a href="#" class="nav-item active"><i
+                                            class="icon hgi-stroke hgi-home-02"></i><span>홈</span></a>
+                                    <a href="#" class="nav-item"><i
+                                            class="icon hgi-stroke hgi-analytics-02"></i><span>분석결과</span></a>
+                                </div>
+                                <div class="nav-cta-placeholder"></div>
+                                <div class="nav-item-group">
+                                    <a href="#" class="nav-item"><i
+                                            class="icon hgi-stroke hgi-time-01"></i><span>히스토리</span></a>
+                                    <a href="#" class="nav-item"><i
+                                            class="icon hgi-stroke hgi-user"></i><span>MY</span></a>
+                                </div>
+                            </nav>
+                            <div class="nav-cta-button"><i class="icon hgi-stroke hgi-ai-beautify"></i></div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <strong>5개 아이템 타입</strong>
+                    <div class="mobile-frame" style="height: 120px;">
+                        <nav class="bottom-nav-bar" style="position: relative; height: 65px; bottom: auto;">
+                            <a href="#" class="nav-item active">
+                                <i class="icon hgi-stroke hgi-home-02"></i>
+                                <span>홈</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <i class="icon hgi-stroke hgi-analytics-02"></i>
+                                <span>분석결과</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <i class="icon hgi-stroke hgi-edit-02"></i>
+                                <span>코칭센터</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <i class="icon hgi-stroke hgi-heart"></i>
+                                <span>히스토리</span>
+                            </a>
+                            <a href="#" class="nav-item">
+                                <i class="icon hgi-stroke hgi-user"></i>
+                                <span>MY</span>
+                            </a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Basic Components -->
+        <section class="component-section">
+            <h2 class="component-title">Basic Components</h2>
+            <h3 class="component-subtitle">Buttons</h3>
+            <div class="button-group">
+                <button class="btn btn-primary">Primary Button</button>
+                <button class="btn btn-secondary">Secondary Button</button>
+                <button class="btn btn-gradient">Gradient Button</button>
+            </div>
+            <h3 class="component-subtitle">Tab & Chips</h3>
+            <strong>Tab Menu</strong>
+            <div class="tab-menu" style="margin-top: 0.5rem;">
+                <div class="tab-item active">전체</div>
+                <div class="tab-item">연애</div>
+                <div class="tab-item">심리</div>
+                <div class="tab-item">비즈니스</div>
+                <div class="tab-item">친구</div>
+                <div class="tab-item">가족</div>
+            </div>
+            <strong style="display: block; margin-top: 1.5rem;">Suggestion Chips</strong>
+            <div class="suggestion-chips" style="margin-top: 0.5rem;">
+                <button class="chip">썸인지 궁금해</button>
+                <button class="chip">친구 사이 분석</button>
+                <button class="chip">재회 가능성</button>
+            </div>
+            <h3 class="component-subtitle">Icon Buttons</h3>
+            <p class="body-text">아이콘 버튼은 텍스트 유무에 따라 두 가지 스타일로 사용할 수 있습니다.</p>
+            <strong style="display: block; margin-bottom: 0.5rem;">Icon with Text</strong>
+            <div class="usage-guide-grid">
+                <div class="guide-item">
+                    <div class="guide-icon-wrapper"><i class="icon hgi-stroke hgi-customer-service"></i></div>
+                    <span>고객센터</span>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-icon-wrapper"><i class="icon hgi-stroke hgi-gift"></i></div>
+                    <span>이용내역</span>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-icon-wrapper"><i class="icon hgi-stroke hgi-user"></i></div>
+                    <span>약관 및 정책</span>
+                </div>
+                <div class="guide-item">
+                    <div class="guide-icon-wrapper"><i class="icon hgi-stroke hgi-money-bag-01"></i></div>
+                    <span>보유 코인</span>
+                </div>
+            </div>
+            <strong style="display: block; margin-top: 1.5rem; margin-bottom: 0.5rem;">Icon Only</strong>
+            <div class="usage-guide-grid">
+                <div class="guide-icon-wrapper"><i class="icon hgi-stroke hgi-customer-service"></i></div>
+                <div class="guide-icon-wrapper"><i class="icon hgi-stroke hgi-gift"></i></div>
+                <div class="guide-icon-wrapper"><i class="icon hgi-stroke hgi-user"></i></div>
+                <div class="guide-icon-wrapper"><i class="icon hgi-stroke hgi-money-bag-01"></i></div>
+            </div>
+        </section>
+
+        <!-- Cards -->
+        <section class="component-section">
+            <h2 class="component-title">Cards</h2>
+            <p class="body-text">컨텐츠를 그룹화하고 표시하는 다양한 스타일의 카드 컴포넌트입니다. <strong>모든 카드는 사용자의 주요 행동을 유도하는 커스텀 버튼으로 작동하도록
+                    디자인되었습니다.</strong></p>
+            <div class="card-container">
+                <div>
+                    <h3 class="component-subtitle">Hero Banner</h3>
+                    <div class="hero-banner clickable-card">
+                        <p>상황에 맞는 대화가 필요할 땐?</p>
+                        <h3>LIA AI 메시지로 마음을 전달하세요!</h3>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="component-subtitle">Action Cards</h3>
+                    <div class="grid grid-cols-2">
+                        <div class="action-card primary clickable-card">
+                            <div>
+                                <h3>메시지 생성</h3>
+                                <p>지금 바로 AI와 대화를 만들어보세요</p>
+                            </div><i class="icon hgi-stroke hgi-message-add-01"></i>
+                        </div>
+                        <div class="action-card secondary clickable-card">
+                            <h3>예약하기</h3><i class="icon hgi-stroke hgi-calendar-03"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="component-subtitle">Strategy Cards</h3>
+                    <div class="grid grid-cols-2">
+                        <div class="strategy-card clickable-card">
+                            <div>
+                                <h3>상황별 대화 전략</h3>
+                                <p>일상 속 다양한 상황! 어떻게 말해야 할지 고민이라면?</p>
+                            </div><i class="icon hgi-stroke hgi-arrow-right-02"></i>
+                        </div>
+                        <div class="strategy-card clickable-card">
+                            <div>
+                                <h3>MBTI별 소통 가이드</h3>
+                                <p>상대방의 성향에 맞춰 이해와 공감 해보기</p>
+                            </div><i class="icon hgi-stroke hgi-arrow-right-02"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="component-subtitle">Content Card</h3>
+                    <div class="content-card clickable-card" style="max-width: 400px;">
+                        <img src="https://placehold.co/480x180/A162F7/FFFFFF?text=LIA+Coaching" alt="전문가 이미지">
+                        <div class="content-info"><span class="badge badge-accent">상담중</span>
+                            <h3>유진성 코칭 전문가</h3><i class="icon hgi-stroke hgi-heart"></i>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="component-subtitle">Profile Cards</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="profile-card">
+                            <img src="https://placehold.co/64x64/FFACC7/FFFFFF?text=ME" alt="내 프로필 아바타"
+                                class="avatar avatar-md">
+                            <div class="profile-info">
+                                <h3>나 (ENFP)</h3>
+                                <div class="profile-tags">
+                                    <span class="tag">#활동적인</span>
+                                    <span class="tag">#열정파</span>
+                                    <span class="tag">#감성적인</span>
+                                </div>
+                            </div>
+                            <button class="change-btn">변경</button>
+                        </div>
+                        <div class="profile-card partner">
+                            <img src="https://placehold.co/64x64/C9A7FF/FFFFFF?text=U" alt="상대방 프로필 아바타"
+                                class="avatar avatar-md">
+                            <div class="profile-info">
+                                <h3>상대방 (INFP)</h3>
+                                <div class="profile-tags">
+                                    <span class="tag">#차분한</span>
+                                    <span class="tag">#계획적인</span>
+                                </div>
+                            </div>
+                            <button class="change-btn">변경</button>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="component-subtitle">Analysis & CTA Cards</h3>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="analysis-card">
+                            <h3 class="title"><i class="icon hgi-stroke hgi-heart"></i>호감도 지수 요약</h3>
+                            <div class="summary-grid">
+                                <div class="doughnut-chart-container">
+                                    <div class="doughnut-chart score-style"></div>
+                                    <div class="doughnut-chart-center score-style">
+                                        <span class="chart-score">82</span>
+                                        <span class="chart-label">호감</span>
+                                    </div>
+                                </div>
+                                <div class="summary-text">
+                                    <p>분석 결과, 상대방은 당신에게 <span class="highlight">82%의 호감</span>을 느끼고 있어요.</p>
+                                </div>
+                            </div>
+                            <div class="keyword-tags">
+                                <span class="tag">#설렘가득</span>
+                                <span class="tag">#긍정적</span>
+                                <span class="tag">#선톡</span>
+                            </div>
+                        </div>
+                        <div class="cta-card">
+                            <p>LIA의 추천 메시지로<br>관계를 한 단계 발전시켜 보세요!</p>
+                            <button class="btn btn-primary">
+                                <i class="icon hgi-stroke hgi-message-add-01"></i>
+                                <span>메시지 추천받기</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Inputs & Lists -->
+        <section class="component-section">
+            <h2 class="component-title">Inputs & Lists</h2>
+            <h3 class="component-subtitle">Input Fields</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="input-wrapper"><i class="icon hgi-stroke hgi-search"></i><input type="text"
+                        placeholder="대화 내역 검색" class="input-field"></div>
+                <textarea class="textarea-field" placeholder="AI에게 전달할 상황이나 감정을 입력하세요..."></textarea>
+            </div>
+            <h3 class="component-subtitle">List View</h3>
+            <div class="list-view" style="border-top: none;">
+                <div class="list-item"><span>프로필 관리</span><i class="icon hgi-stroke hgi-arrow-right-02"></i></div>
+                <div class="list-item"><span>알림 설정</span><i class="icon hgi-stroke hgi-arrow-right-02"></i></div>
+                <div class="list-item"><span>데이터 백업 및 복원</span><i class="icon hgi-stroke hgi-arrow-right-02"></i></div>
+            </div>
+            <h3 class="component-subtitle">Analysis Menu List</h3>
+            <div class="list-view">
+                <div class="list-item">
+                    <span>대화 내용 입력하기</span>
+                    <i class="icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>참고 내용 입력하기</span>
+                    <i class="icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>파일로 업로드하기</span>
+                    <i class="icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chat UI -->
+        <section class="component-section">
+            <h2 class="component-title">Chat UI</h2>
+            <p class="body-text">챗봇 인터페이스에 사용되는 컴포넌트 모음입니다.</p>
+            <div class="chat-container">
+                <div class="system-message">
+                    <i class="icon hgi-stroke hgi-check-circle"></i> 2025.08.08 AI 챗봇과 연결되었습니다.
+                </div>
+
+                <div class="chat-bubble">
+                    <div class="bot-avatar"><i class="icon hgi-stroke hgi-bot"></i></div>
+                    <div class="bubble-content">
+                        <h2>안녕하세요, 고객님.<br>LIA AI 챗봇입니다.</h2>
+                        <p>두 분의 관계, 제가 분석해 드릴게요!<br>어떤 대화를 분석해 볼까요?</p>
+                        <div class="suggestion-chips">
+                            <button class="chip">썸인지 궁금해</button>
+                            <button class="chip">친구 사이 분석</button>
+                            <button class="chip">재회 가능성</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-bubble">
+                    <div class="bot-avatar"><i class="icon hgi-stroke hgi-bot"></i></div>
+                    <div class="bubble-content faq-list">
+                        <h3 class="faq-title">자주 묻는 질문 👀</h3>
+                        <div class="faq-item">대화 내용은 안전하게 보관되나요?</div>
+                        <div class="faq-item">MBTI 정보가 꼭 필요한가요?</div>
+                        <div class="faq-item">분석 결과는 얼마나 정확한가요?</div>
+                    </div>
+                </div>
+
+                <h3 class="component-subtitle" style="margin-top: 1rem; margin-bottom: 0.5rem;">Chat Input Footer</h3>
+                <div class="input-footer">
+                    <button class="icon-btn">
+                        <i class="icon hgi-stroke hgi-attachment"></i>
+                    </button>
+                    <div class="text-input-wrapper">
+                        <input type="text" class="text-input" placeholder="대화 내용을 붙여넣어 주세요.">
+                        <button class="icon-btn send-btn">
+                            <i class="icon hgi-stroke hgi-arrow-right-01"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Data Display -->
+        <section class="component-section">
+            <h2 class="component-title">Data Display</h2>
+            <div class="grid grid-cols-2">
+                <div>
+                    <h3 class="component-subtitle">Bar Chart</h3>
+                    <div class="chart-grid-wrapper">
+                        <div class="y-axis"><span>100%</span><span>50%</span><span>0%</span></div>
+                        <div class="bar-chart-container">
+                            <div class="bar-chart-item">
+                                <div class="bar-tooltip">75%</div>
+                                <div class="bar" style="height: 75%;"></div>
+                            </div>
+                            <div class="bar-chart-item">
+                                <div class="bar-tooltip">88%</div>
+                                <div class="bar" style="height: 88%;"></div>
+                            </div>
+                            <div class="bar-chart-item">
+                                <div class="bar-tooltip">60%</div>
+                                <div class="bar" style="height: 60%;"></div>
+                            </div>
+                            <div class="bar-chart-item">
+                                <div class="bar-tooltip">92%</div>
+                                <div class="bar" style="height: 92%;"></div>
+                            </div>
+                        </div>
+                        <div></div>
+                        <div class="x-axis-labels"><span class="bar-label">유머</span><span
+                                class="bar-label">진지</span><span class="bar-label">일상</span><span
+                                class="bar-label">로맨틱</span></div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="component-subtitle">Doughnut Chart</h3>
+                    <div class="doughnut-chart-wrapper">
+                        <div class="doughnut-chart-container">
+                            <div class="doughnut-chart legend-style"></div>
+                            <div class="doughnut-chart-center legend-style"></div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--primary);"></div>
+                                <span>긍정</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--accent);"></div><span>중립</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--yellow);"></div><span>부정</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="component-subtitle">Progress Bar</h3>
+            <div>
+                <span>AI가 메시지를 작성하고 있습니다... (65%)</span>
+                <div class="progress-bar" style="margin-top: 0.5rem;">
+                    <div class="progress-bar-fill" style="width: 65%;"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feedback & Overlays -->
+        <section class="component-section">
+            <h2 class="component-title">Feedback & Overlays</h2>
+            <h3 class="component-subtitle">Modals & Pop-ups</h3>
+            <div class="button-group">
+                <button onclick="toggleModal('centerModal')" class="btn btn-secondary">기본 모달</button>
+                <button onclick="toggleModal('bottomSheetModal')" class="btn btn-secondary">바텀 시트</button>
+            </div>
+            <h3 class="component-subtitle">Accordion / FAQ</h3>
+            <div class="accordion">
+                <div class="accordion-item">
+                    <div class="accordion-header"><span>MBTI 정보는 꼭 필요한가요?</span><i
+                            class="icon hgi-stroke hgi-arrow-down-02"></i></div>
+                    <div class="accordion-content">
+                        <p>MBTI 정보는 더 정확한 메시지를 생성하는 데 도움이 되지만, 필수는 아닙니다. 다른 성격 특성만으로도 충분히 맞춤형 메시지를 만들 수 있습니다.</p>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <div class="accordion-header"><span>데이터는 안전하게 보관되나요?</span><i
+                            class="icon hgi-stroke hgi-arrow-down-02"></i></div>
+                    <div class="accordion-content">
+                        <p>네, 사용자의 모든 데이터는 안전하게 암호화되어 서버에 저장되며, 본인 외에는 아무도 접근할 수 없습니다.</p>
+                    </div>
+                </div>
+            </div>
+            <h3 class="component-subtitle">Skeleton Loaders</h3>
+            <div class="grid grid-cols-2">
+                <div class="skeleton-loader">
+                    <div class="skeleton skeleton-avatar"></div>
+                    <div style="flex: 1;">
+                        <div class="skeleton skeleton-text"></div>
+                        <div class="skeleton skeleton-text skeleton-text-short" style="margin-top: 0.5rem;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="skeleton skeleton-text" style="height: 40px; margin-bottom: 1rem;"></div>
+                    <div class="skeleton skeleton-text skeleton-text-short"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive & UI Elements -->
+        <section class="component-section">
+            <h2 class="component-title">Interactive & UI Elements</h2>
+            <h3 class="component-subtitle">Alerts</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="alert alert-success"><i class="icon hgi-stroke hgi-check-circle"></i><span>메시지가 성공적으로
+                        전송되었습니다.</span></div>
+                <div class="alert alert-danger"><i class="icon hgi-stroke hgi-error"></i><span>메시지 전송에 실패했습니다.</span>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Avatars & Badges</h3>
+            <div class="grid grid-cols-2">
+                <div>
+                    <strong>Avatars</strong>
+                    <div class="button-group" style="margin-top: 0.5rem;">
+                        <div class="avatar-container">
+                            <img src="https://placehold.co/96x96/FFACC7/FFFFFF?text=LIA" alt="아바타 이미지"
+                                class="avatar avatar-lg bordered">
+                            <span class="status-dot"></span>
+                        </div>
+                        <div class="avatar-container">
+                            <img src="https://placehold.co/64x64/A162F7/FFFFFF?text=Her" alt="아바타 이미지"
+                                class="avatar bordered">
+                            <span class="status-dot offline"></span>
+                        </div>
+                        <div class="avatar-container">
+                            <img src="https://placehold.co/40x40/718096/FFFFFF?text=He" alt="아바타 이미지"
+                                class="avatar avatar-sm bordered">
+                            <span class="status-dot"></span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <strong>Badges & Tags</strong>
+                    <div class="button-group" style="margin-top: 0.5rem;">
+                        <span class="badge badge-primary">Primary</span>
+                        <span class="badge badge-accent">Accent</span>
+                        <span class="badge badge-light">Light</span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Toggle Switch & Slider</h3>
+            <div class="grid grid-cols-2">
+                <div>
+                    <strong>Toggle Switch</strong>
+                    <div class="toggle-switch-wrapper" style="margin-top: 0.5rem;">
+                        <span>알림 받기</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <strong>Slider</strong>
+                    <div class="slider-container" style="margin-top: 0.5rem;">
+                        <div class="slider-header">
+                            <span>AI 응답 속도</span>
+                            <span class="slider-value" id="sliderValue">5</span>
+                        </div>
+                        <input type="range" min="1" max="10" value="5" id="rangeSlider">
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Dropdown Menu</h3>
+            <div class="dropdown" id="dropdown">
+                <button class="btn btn-secondary" onclick="toggleDropdown(event)">
+                    메시지 스타일 <i class="icon hgi-stroke hgi-arrow-down-02"></i>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#">기본</a>
+                    <a href="#">유머러스하게</a>
+                    <a href="#">진지하게</a>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Tooltip</h3>
+            <div class="tooltip-container">
+                <button class="btn btn-secondary">
+                    <i class="hgi hgi-stroke hgi-information-circle"></i>
+                    도움말
+                </button>
+                <span class="tooltip-text">AI가 대화 패턴을 분석합니다.</span>
+            </div>
+
+            <h3 class="component-subtitle">Data Table</h3>
+            <div class="data-table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>날짜</th>
+                            <th>상황</th>
+                            <th>성공률</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>08-01</td>
+                            <td>데이트 신청</td>
+                            <td>85%</td>
+                        </tr>
+                        <tr>
+                            <td>07-30</td>
+                            <td>일상 대화</td>
+                            <td>95%</td>
+                        </tr>
+                        <tr>
+                            <td>07-28</td>
+                            <td>약속 잡기</td>
+                            <td>90%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Advanced Layout & State Components -->
+        <section class="component-section">
+            <h2 class="component-title">Advanced Layout & State Components</h2>
+
+            <h3 class="component-subtitle">Calendar</h3>
+            <div id="calendar" class="calendar-container">
+                <div class="calendar-header">
+                    <i class="icon hgi-stroke hgi-arrow-left-02" id="prevMonth"></i>
+                    <span class="calendar-month-year" id="monthYear"></span>
+                    <i class="icon hgi-stroke hgi-arrow-right-02" id="nextMonth"></i>
+                </div>
+                <div class="calendar-grid">
+                    <div class="calendar-day day-name">일</div>
+                    <div class="calendar-day day-name">월</div>
+                    <div class="calendar-day day-name">화</div>
+                    <div class="calendar-day day-name">수</div>
+                    <div class="calendar-day day-name">목</div>
+                    <div class="calendar-day day-name">금</div>
+                    <div class="calendar-day day-name">토</div>
+                </div>
+                <div class="calendar-grid" id="calendarDays"></div>
+            </div>
+
+            <h3 class="component-subtitle">Pagination</h3>
+            <nav class="pagination-container">
+                <div class="page-item disabled"><i class="icon hgi-stroke hgi-arrow-left-02"></i></div>
+                <div class="page-item active">1</div>
+                <div class="page-item">2</div>
+                <div class="page-item">3</div>
+                <div class="page-item"><i class="icon hgi-stroke hgi-arrow-right-02"></i></div>
+            </nav>
+
+            <h3 class="component-subtitle">Stepper</h3>
+            <div class="stepper">
+                <div class="stepper-line"></div>
+                <div class="stepper-progress" style="width: 48%;"></div>
+                <div class="step-item completed">
+                    <div class="step-circle"><i class="icon hgi-stroke hgi-check"></i></div>
+                    <span class="step-label">정보 입력</span>
+                </div>
+                <div class="step-item active">
+                    <div class="step-circle">2</div>
+                    <span class="step-label">옵션 선택</span>
+                </div>
+                <div class="step-item">
+                    <div class="step-circle">3</div>
+                    <span class="step-label">메시지 생성</span>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Empty States</h3>
+            <div class="empty-state">
+                <i class="icon hgi-stroke hgi-folder-remove"></i>
+                <h3>결과 없음</h3>
+                <p>아직 생성된 분석 결과가 없습니다. <br>새로운 메시지를 만들어보세요!</p>
+                <button class="btn btn-primary">메시지 생성하기</button>
+            </div>
+        </section>
+
+        <!-- Page Specific Layouts & Components -->
+        <section class="component-section">
+            <h2 class="component-title">Page Specific Layouts</h2>
+            <p class="body-text">특정 페이지에서 사용되는 고유한 레이아웃과 컴포넌트 조합입니다.</p>
+
+            <h3 class="component-subtitle">Home Screen Layout</h3>
+            <div class="action-grid">
+                <div class="action-card primary clickable-card">
+                    <div>
+                        <h3>메시지 생성</h3>
+                        <p>지금 바로 AI와 대화를 만들어보세요</p>
+                    </div>
+                    <i class="icon hgi-stroke hgi-message-add-01"></i>
+                </div>
+                <div class="right-column">
+                    <div class="action-card secondary clickable-card">
+                        <h3>예약하기</h3>
+                        <i class="icon hgi-stroke hgi-calendar-03"></i>
+                    </div>
+                    <div class="action-card secondary clickable-card">
+                        <h3>상대 분석</h3>
+                        <i class="icon hgi-stroke hgi-bot"></i>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Analysis Result Layout</h3>
+            <div class="bot-intro">
+                <div class="bot-avatar"><i class="icon hgi-stroke hgi-bot"></i></div>
+                <h2>두 분은 '썸'타는 중!</h2>
+                <p>서로를 향한 호감이 가득 느껴져요.</p>
+            </div>
+            <div class="analysis-card">
+                <h3 class="title"><i class="icon hgi-stroke hgi-search-02"></i>상세 분석 결과</h3>
+                <div class="accordion">
+                    <div class="accordion-item first-of-type">
+                        <div class="accordion-header"><span>호감도 표현</span><i
+                                class="icon hgi-stroke hgi-arrow-down-02"></i></div>
+                        <div class="accordion-content">
+                            <p>상대방은 질문을 던지거나 리액션을 하는 등 적극적으로 대화에 참여하고 있습니다.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <div class="accordion-header"><span>관계 예측 및 조언</span><i
+                                class="icon hgi-stroke hgi-arrow-down-02"></i></div>
+                        <div class="accordion-content">
+                            <p>지금처럼 꾸준히 마음을 표현한다면 연인으로 발전할 가능성이 매우 높습니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Banners & Footers</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                <div class="ad-banner">
+                    배너 - 광고
+                </div>
+                <div class="sticky-footer">
+                    <button class="btn btn-primary">
+                        <i class="icon hgi-stroke hgi-ai-beautify"></i>
+                        <span>AI로 분석하고 메시지 받기</span>
+                    </button>
+                </div>
+            </div>
+
+            <h3 class="component-subtitle">Section Divider</h3>
+            <div
+                style="padding: 1rem; background-color: var(--surface); border: 1px solid var(--border-color); border-radius: 0.5rem;">
+                <p class="body-text">콘텐츠 블록 1</p>
+                <div class="section-divider"></div>
+                <p class="body-text">콘텐츠 블록 2</p>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Modals HTML (outside container) -->
+    <div id="centerModal" class="modal-overlay" onclick="toggleModal('centerModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>알림</h3>
+            <p>로그인이 필요한 서비스입니다.<br>로그인하시겠습니까?</p>
+            <div class="modal-actions">
+                <button onclick="toggleModal('centerModal')" class="btn btn-secondary">취소</button>
+                <button class="btn btn-primary">로그인</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="bottomSheetModal" class="modal-overlay" onclick="toggleModal('bottomSheetModal')">
+        <div class="bottom-sheet" onclick="event.stopPropagation()">
+            <h3>서비스 이용을 위해<br>아래 접근권한 허용이 필요해요</h3>
+            <div class="permission-list">
+                <div class="permission-item">
+                    <i class="icon hgi-stroke hgi-notification-02"></i>
+                    <div class="permission-info">
+                        <p class="title">알림</p>
+                        <p class="description">메시지 생성 완료 등 알림 제공</p>
+                    </div>
+                </div>
+                <div class="permission-item">
+                    <i class="icon hgi-stroke hgi-folder"></i>
+                    <div class="permission-info">
+                        <p class="title">저장공간</p>
+                        <p class="description">대화 내역 백업 및 복원</p>
+                    </div>
+                </div>
+            </div>
+            <p class="small-text" style="text-align: left;">선택 접근권한에 동의하지 않아도 서비스를 이용할 수 있어요.</p>
+            <button onclick="toggleModal('bottomSheetModal')" class="btn btn-primary">확인</button>
+        </div>
+    </div>
+
+    <script>
+        // 모달 토글 함수
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.toggle('open');
+            }
+        }
+
+        // 아코디언 초기화 함수
+        function initAccordions() {
+            const accordions = document.querySelectorAll('.accordion-item');
+            accordions.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                const content = item.querySelector('.accordion-content');
+                header.addEventListener('click', () => {
+                    item.classList.toggle('open');
+                    if (item.classList.contains('open')) {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    } else {
+                        content.style.maxHeight = null;
+                    }
+                });
+            });
+        }
+
+        // 드롭다운 토글 함수
+        function toggleDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('dropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // 슬라이더 초기화 함수
+        function initSlider() {
+            const slider = document.getElementById('rangeSlider');
+            const valueSpan = document.getElementById('sliderValue');
+            if (slider && valueSpan) {
+                slider.addEventListener('input', (e) => {
+                    valueSpan.textContent = e.target.value;
+                });
+            }
+        }
+
+        // 캘린더 초기화 함수
+        function initCalendar() {
+            const monthYearEl = document.getElementById('monthYear');
+            const daysEl = document.getElementById('calendarDays');
+            const prevMonthBtn = document.getElementById('prevMonth');
+            const nextMonthBtn = document.getElementById('nextMonth');
+
+            if (!monthYearEl) return; // 캘린더가 없는 경우 함수 종료
+
+            let currentDate = new Date();
+
+            function renderCalendar() {
+                const year = currentDate.getFullYear();
+                const month = currentDate.getMonth();
+
+                monthYearEl.textContent = `${year}년 ${month + 1}월`;
+
+                const firstDayOfMonth = new Date(year, month, 1).getDay();
+                const lastDateOfMonth = new Date(year, month + 1, 0).getDate();
+                const lastDateOfPrevMonth = new Date(year, month, 0).getDate();
+
+                let daysHTML = "";
+
+                // 이전 달의 날짜
+                for (let i = firstDayOfMonth; i > 0; i--) {
+                    daysHTML += `<div class="calendar-day other-month">${lastDateOfPrevMonth - i + 1}</div>`;
+                }
+
+                // 현재 달의 날짜
+                const today = new Date();
+                for (let i = 1; i <= lastDateOfMonth; i++) {
+                    let className = "calendar-day";
+                    if (i === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                        className += " today";
+                    }
+                    if (i === 15) { // 예시로 15일을 선택된 날짜로 표시
+                        className += " selected";
+                    }
+                    daysHTML += `<div class="${className}">${i}</div>`;
+                }
+
+                daysEl.innerHTML = daysHTML;
+            }
+
+            prevMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+                renderCalendar();
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+                renderCalendar();
+            });
+
+            renderCalendar();
+        }
+
+        // DOM이 로드된 후 스크립트 실행
+        document.addEventListener('DOMContentLoaded', () => {
+            initAccordions();
+            initSlider();
+            initCalendar();
+
+            const themeToggle = document.getElementById('themeToggle');
+            // 페이지 로드 시 다크모드 기본 적용 (디자인 시안 확인용)
+            if (!document.body.classList.contains('dark-mode')) {
+                document.body.classList.add('dark-mode');
+                themeToggle.checked = true;
+            }
+
+            themeToggle.addEventListener('change', () => {
+                document.body.classList.toggle('dark-mode');
+            });
+
+            // 드롭다운 외부 클릭 시 닫기
+            window.onclick = function (event) {
+                const dropdown = document.getElementById('dropdown');
+                if (dropdown && !event.target.closest('.dropdown')) {
+                    if (dropdown.classList.contains('show')) {
+                        dropdown.classList.remove('show');
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

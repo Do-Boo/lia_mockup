@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIA 대화 심층 분석</title>
+    <!-- Google Fonts (Noto Sans KR) 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Hugeicons CDN 로드 -->
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <style>
+        /* --- CSS 변수 정의 (LIA 디자인 시스템) --- */
+        :root {
+            /* Brand & Accent Colors */
+            --primary: #FF70A6;
+            --accent: #A162F7;
+            --yellow: #FFD670;
+
+            /* Light Mode Colors */
+            --text-primary-light: #1A1A1A;
+            --text-secondary-light: #3A3A3A;
+            --text-tertiary-light: #718096;
+            --background-color-light: #f8f9fa;
+            --surface-light: #FFFFFF;
+            --border-color-light: #e9ecef;
+            --light-gray-light: #F1F3F5;
+            --card-bg-pink-light: #FFF8FB;
+            --card-bg-purple-light: #F6F0FF;
+
+            /* Dark Mode Colors */
+            --text-primary-dark: #f8f9fa;
+            --text-secondary-dark: #adb5bd;
+            --text-tertiary-dark: #718096;
+            --background-color-dark: #121212;
+            --surface-dark: #1E1E1E;
+            --border-color-dark: #343a40;
+            --light-gray-dark: #2c2c2e;
+            --card-bg-pink-dark: #38242c;
+            --card-bg-purple-dark: #2c253a;
+
+            /* Gradients */
+            --primary-gradient: linear-gradient(to right, #FF70A6, #A162F7);
+            --accent-gradient: linear-gradient(to right, #A162F7, #B681F8);
+        }
+
+        /* --- 기본 스타일 (라이트 모드 기본값) --- */
+        body {
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --text-tertiary: var(--text-tertiary-light);
+            --background-color: var(--background-color-light);
+            --surface: var(--surface-light);
+            --border-color: var(--border-color-light);
+            --light-gray: var(--light-gray-light);
+            --card-bg-pink: var(--card-bg-pink-light);
+            --card-bg-purple: var(--card-bg-purple-light);
+
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- 다크 모드 스타일 --- */
+        body.dark-mode {
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --text-tertiary: var(--text-tertiary-dark);
+            --background-color: var(--background-color-dark);
+            --surface: var(--surface-dark);
+            --border-color: var(--border-color-dark);
+            --light-gray: var(--light-gray-dark);
+            --card-bg-pink: var(--card-bg-pink-dark);
+            --card-bg-purple: var(--card-bg-purple-dark);
+        }
+
+        /* --- App Layout --- */
+        .app-container {
+            margin: 0 auto;
+            background-color: var(--surface);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            /* 하단 네비게이션 공간 확보 */
+            transition: background-color 0.3s;
+        }
+
+        .main-content {
+            padding: 1.5rem;
+        }
+
+        /* --- 상단 네비게이션 --- */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .top-nav .icon {
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+        }
+
+        /* --- 광고 배너 --- */
+        .ad-banner {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 0.75rem;
+            font-weight: 500;
+            font-size: 0.875rem;
+        }
+
+        /* --- 프로필 카드 --- */
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-card {
+            background-color: var(--card-bg-pink);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        body.dark-mode .profile-card {
+            background-color: var(--card-bg-pink-dark);
+        }
+
+        .profile-card.partner {
+            background-color: var(--card-bg-purple);
+        }
+
+        body.dark-mode .profile-card.partner {
+            background-color: var(--card-bg-purple-dark);
+        }
+
+        .avatar {
+            width: 3.5rem;
+            height: 3.5rem;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-info {
+            flex-grow: 1;
+        }
+
+        .profile-info h3 {
+            margin: 0;
+            font-size: 1.125rem;
+            font-weight: 700;
+        }
+
+        .profile-tags {
+            margin-top: 0.25rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.375rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+
+        .change-btn {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+        }
+
+        /* --- 분석 메뉴 리스트 (디자인 가이드 적용) --- */
+        .analysis-menu {
+            border-top: 1px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+
+        .analysis-menu>.list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0.5rem;
+            /* 상하 여백 조정 */
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.3s;
+        }
+
+        .analysis-menu>.list-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .analysis-menu>.list-item:active {
+            background-color: var(--border-color);
+        }
+
+        /* --- 하단 고정 버튼 --- */
+        .sticky-footer {
+            position: fixed;
+            bottom: 80px;
+            /* 하단 네비게이션 높이만큼 띄우기 */
+            left: 0;
+            right: 0;
+            padding: 1rem 1.5rem;
+            background-color: var(--surface);
+            transition: background-color 0.3s;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.75rem;
+            border: 1px solid transparent;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background-image: var(--primary-gradient);
+            color: white;
+            background-size: 200% auto;
+        }
+
+        .btn-primary:hover {
+            background-position: right center;
+            box-shadow: 0 4px 15px rgba(255, 112, 166, 0.4);
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        /* --- 하단 네비게이션 --- */
+        .bottom-nav-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            z-index: 1000;
+        }
+
+        .bottom-nav-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--surface);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            flex: 1;
+        }
+
+        .nav-item .icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-item.active .icon,
+        .nav-item.active span {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 상단 네비게이션 -->
+        <nav class="top-nav">
+            <i class="icon hgi-stroke hgi-arrow-left-02"></i>
+            <h1 class="top-nav-title">대화 심층 분석하기</h1>
+            <i class="icon hgi-stroke hgi-notification-02"></i>
+        </nav>
+
+        <!-- 광고 배너 -->
+        <div class="ad-banner">
+            배너 - 광고
+        </div>
+
+        <main class="main-content">
+            <!-- 프로필 섹션 -->
+            <section class="profile-section">
+                <div class="profile-card">
+                    <img src="https://placehold.co/64x64/FFACC7/FFFFFF?text=ME" alt="내 프로필 아바타" class="avatar">
+                    <div class="profile-info">
+                        <h3>나 (ENFP)</h3>
+                        <div class="profile-tags">
+                            <span class="tag">#활동적인</span>
+                            <span class="tag">#열정파</span>
+                            <span class="tag">#감성적인</span>
+                            <span class="tag">#리액션왕</span>
+                        </div>
+                    </div>
+                    <button class="change-btn">변경</button>
+                </div>
+                <div class="profile-card partner">
+                    <img src="https://placehold.co/64x64/C9A7FF/FFFFFF?text=U" alt="상대방 프로필 아바타" class="avatar">
+                    <div class="profile-info">
+                        <h3>상대방 (INFP)</h3>
+                        <div class="profile-tags">
+                            <span class="tag">#차분한</span>
+                            <span class="tag">#계획적인</span>
+                            <span class="tag">#감성적인</span>
+                            <span class="tag">#무뚝뚝</span>
+                        </div>
+                    </div>
+                    <button class="change-btn">변경</button>
+                </div>
+            </section>
+
+            <!-- 분석 메뉴 -->
+            <section class="analysis-menu">
+                <div class="list-item">
+                    <span>대화 내용 입력하기</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>참고 내용 입력하기</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>파일로 업로드하기</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>샘플 분석 체험하기</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+            </section>
+        </main>
+
+        <!-- 분석하기 버튼 (하단 고정) -->
+        <footer class="sticky-footer">
+            <button class="btn btn-primary">
+                <i class="icon hgi-stroke hgi-ai-beautify"></i>
+                <span>AI로 분석하고 메시지 받기</span>
+            </button>
+        </footer>
+
+        <!-- 하단 네비게이션 -->
+        <div class="bottom-nav-wrapper">
+            <nav class="bottom-nav-bar">
+                <a href="#" class="nav-item active">
+                    <i class="icon hgi-stroke hgi-home-02"></i>
+                    <span>홈</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon hgi-stroke hgi-analytics-02"></i>
+                    <span>분석결과</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon hgi-stroke hgi-edit-02"></i>
+                    <span>코칭센터</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon hgi-stroke hgi-heart"></i>
+                    <span>히스토리</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon hgi-stroke hgi-user"></i>
+                    <span>MY</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+    <script>
+        // 다크모드 등 인터랙션을 위한 스크립트 (필요시 추가)
+    </script>
+</body>
+
+</html>

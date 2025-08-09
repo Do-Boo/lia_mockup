@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIA 상세 분석 결과 (디자인 시스템 준수)</title>
+    <!-- Google Fonts (Noto Sans KR) 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Hugeicons CDN 로드 -->
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <style>
+        /* --- CSS 변수 정의 (design_mockup.html) --- */
+        :root {
+            /* Brand & Accent Colors */
+            --primary: #FF70A6;
+            --accent: #A162F7;
+            --success: #28a745;
+            --danger: #dc3545;
+            --info: #0dcaf0;
+            /* 추가된 색상 */
+
+            /* Light Mode Colors */
+            --text-primary-light: #1A1A1A;
+            --text-secondary-light: #3A3A3A;
+            --text-tertiary-light: #718096;
+            --background-color-light: #f8f9fa;
+            --surface-light: #FFFFFF;
+            --border-color-light: #e9ecef;
+            --light-gray-light: #F1F3F5;
+            --card-bg-pink-light: #FFF8FB;
+            --card-bg-purple-light: #F6F0FF;
+
+
+            /* Dark Mode Colors */
+            --text-primary-dark: #f8f9fa;
+            --text-secondary-dark: #adb5bd;
+            --text-tertiary-dark: #718096;
+            --background-color-dark: #121212;
+            --surface-dark: #1E1E1E;
+            --border-color-dark: #343a40;
+            --light-gray-dark: #2c2c2e;
+            --card-bg-pink-dark: #38242c;
+            --card-bg-purple-dark: #2c253a;
+        }
+
+        /* --- 기본 스타일 (design_mockup.html) --- */
+        body {
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --text-tertiary: var(--text-tertiary-light);
+            --background-color: var(--background-color-light);
+            --surface: var(--surface-light);
+            --border-color: var(--border-color-light);
+            --light-gray: var(--light-gray-light);
+            --card-bg-pink: var(--card-bg-pink-light);
+            --card-bg-purple: var(--card-bg-purple-light);
+
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- 다크 모드 스타일 (design_mockup.html) --- */
+        body.dark-mode {
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --text-tertiary: var(--text-tertiary-dark);
+            --background-color: var(--background-color-dark);
+            --surface: var(--surface-dark);
+            --border-color: var(--border-color-dark);
+            --light-gray: var(--light-gray-dark);
+            --card-bg-pink: var(--card-bg-pink-dark);
+            --card-bg-purple: var(--card-bg-purple-dark);
+        }
+
+        /* --- App Layout --- */
+        .app-container {
+            margin: 0 auto;
+            background-color: var(--surface);
+            min-height: 100vh;
+            transition: background-color 0.3s;
+        }
+
+        .main-content {
+            padding: 1.5rem;
+        }
+
+        /* --- 상단 네비게이션 (design_mockup.html) --- */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.3s, border-color 0.3s;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .top-nav .icon {
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+            cursor: pointer;
+        }
+
+        /* --- 탭 메뉴 (design_mockup.html) --- */
+        .tab-menu {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            background-color: var(--surface);
+            position: sticky;
+            top: 61px;
+            z-index: 99;
+            padding: 0 1rem;
+        }
+
+        .tab-item {
+            flex: 1;
+            text-align: center;
+            padding: 1rem 0.5rem;
+            font-weight: 700;
+            color: var(--text-tertiary);
+            cursor: pointer;
+            position: relative;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s;
+            font-size: 0.875rem;
+            white-space: nowrap;
+        }
+
+        .tab-item.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* --- 탭 콘텐츠 --- */
+        .tab-content {
+            display: none;
+            padding-bottom: 80px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .component-section {
+            background-color: var(--surface);
+            padding: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .component-subtitle {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-body p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 0 0 1rem 0;
+            color: var(--text-secondary);
+        }
+
+        .card-body strong {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* --- Alert 컴포넌트 (design_mockup.html) --- */
+        .alert {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 0.75rem;
+            transition: background-color 0.3s, color 0.3s;
+            margin-bottom: 0.75rem;
+            font-size: 0.9rem;
+        }
+
+        .alert .icon {
+            font-size: 1.5rem;
+            margin-right: 0.75rem;
+            flex-shrink: 0;
+        }
+
+        .alert-success {
+            background-color: var(--card-bg-pink);
+            color: #B35276;
+        }
+
+        body.dark-mode .alert-success {
+            color: #ffb3cc;
+        }
+
+        .alert-success .icon {
+            color: var(--primary);
+        }
+
+        .alert-danger {
+            background-color: var(--card-bg-purple);
+            color: #7A49C3;
+        }
+
+        body.dark-mode .alert-danger {
+            color: #d1b3ff;
+        }
+
+        .alert-danger .icon {
+            color: var(--accent);
+        }
+
+        .evidence-list .impact {
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-left: 0.5rem;
+        }
+
+        /* --- 데이터 시각화 (design_mockup.html 컴포넌트 활용) --- */
+        .data-vis-item {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: var(--light-gray);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-bar-fill.primary {
+            background-color: var(--primary);
+        }
+
+        .progress-bar-fill.accent {
+            background-color: var(--accent);
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- 아코디언 (design_mockup.html) --- */
+        .accordion-item {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .accordion-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .accordion-header .icon {
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.open .accordion-header .icon {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            padding: 0;
+        }
+
+        .accordion-content p {
+            padding: 0 0 1rem 0;
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* --- [NEW] Doughnut Chart & Legend --- */
+        .doughnut-chart-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            gap: 1rem;
+        }
+
+        .doughnut-chart {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+        }
+
+        .doughnut-chart-center {
+            position: absolute;
+            width: 90px;
+            height: 90px;
+            background: var(--surface);
+            border-radius: 50%;
+            transition: background-color 0.3s;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+
+        /* --- [NEW] Bar Chart --- */
+        .bar-chart-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+            height: 150px;
+            padding: 1rem;
+            background-color: var(--light-gray);
+            border-radius: 0.75rem;
+        }
+
+        .bar-item {
+            width: 20%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bar {
+            width: 100%;
+            background-color: var(--primary);
+            border-radius: 4px 4px 0 0;
+            transition: height 1s ease-out;
+        }
+
+        .bar-label {
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* --- [NEW] Action Card for Solution --- */
+        .action-card {
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 120px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 1rem;
+        }
+
+        .action-card:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        .action-card h3 {
+            margin: 0 0 0.25rem;
+            font-size: 1.25rem;
+        }
+
+        .action-card p {
+            margin: 0;
+            font-size: 0.875rem;
+            opacity: 0.9;
+            color: white;
+        }
+
+        .action-card.primary {
+            background-image: linear-gradient(to right, #FF70A6, #FFA1C5);
+        }
+
+        .action-card.accent {
+            background-image: linear-gradient(to right, #A162F7, #B983FF);
+        }
+
+        /* --- CTA (design_mockup.html) --- */
+        .cta-footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: var(--surface);
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--border-color);
+            z-index: 101;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid transparent;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            font-size: 1rem;
+            width: 100%;
+        }
+
+        .btn-gradient {
+            background-image: linear-gradient(to right, #A162F7, #7c45d8);
+            color: white;
+            background-size: 200% auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 상단 네비게이션 -->
+        <nav class="top-nav">
+            <i class="icon hgi-stroke hgi-arrow-left-02"></i>
+            <h1 class="top-nav-title">분석 결과</h1>
+            <i class="icon hgi-stroke hgi-share-02"></i>
+        </nav>
+
+        <!-- 탭 메뉴 -->
+        <div class="tab-menu">
+            <div class="tab-item active" data-tab="overall">종합 분석</div>
+            <div class="tab-item" data-tab="personality">성격 궁합</div>
+            <div class="tab-item" data-tab="patterns">대화 패턴</div>
+            <div class="tab-item" data-tab="solution">AI 솔루션</div>
+        </div>
+
+        <main class="main-content">
+            <!-- 종합 분석 탭 -->
+            <div id="overall" class="tab-content active">
+                <section class="component-section">
+                    <h2 class="component-subtitle">종합 진단: 최고의 동료이자 찐친</h2>
+                    <div class="card-body">
+                        <p>AI 분석 결과, 두 분은 <strong>친구 또는 협업 파트너</strong>로서 최고의 시너지를 낼 수 있는 관계입니다. 연애 감정은 아니지만, 함께 성장할 수
+                            있는 매우 가치 있는 관계예요!</p>
+                    </div>
+
+                    <h3 class="component-subtitle">AI의 판단 근거</h3>
+                    <div class="evidence-list">
+                        <div class="alert alert-danger">
+                            <i class="icon hgi-stroke hgi-error"></i>
+                            <span>상대방이 "여친 만났지"라고 직접 언급했어요. 이것이 '썸'이 아님을 보여주는 가장 확실한 증거입니다.<span
+                                    class="impact">-80점</span></span>
+                        </div>
+                        <div class="alert alert-success">
+                            <i class="icon hgi-stroke hgi-check-circle"></i>
+                            <span>코딩, 앱 개발 등 공통 관심사를 기반으로 깊은 대화를 나누고 있어 유대감이 매우 높습니다.<span
+                                    class="impact">+25점</span></span>
+                        </div>
+                        <div class="alert alert-danger">
+                            <i class="icon hgi-stroke hgi-error"></i>
+                            <span>대화에 설렘이나 연애 감정을 암시하는 표현이 없고, 주로 일과 취미에 집중되어 있습니다.<span
+                                    class="impact">-20점</span></span>
+                        </div>
+                    </div>
+
+                    <h3 class="component-subtitle">감정 변화 추이 (3주간)</h3>
+                    <div class="data-vis-item">
+                        <div class="progress-label"><span>나 (ESFP)</span><span>85점</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill primary" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div class="data-vis-item">
+                        <div class="progress-label"><span>상대방 (ENTP)</span><span>80점</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill accent" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                    <p class="card-body" style="font-size: 0.9rem;">두 분의 감정은 3주 내내 안정적으로 높은 수준을 유지하고 있습니다. 이는 서로에게 매우
+                        긍정적이고 편안한 관계라는 증거입니다.</p>
+                </section>
+            </div>
+
+            <!-- 성격 궁합 탭 -->
+            <div id="personality" class="tab-content">
+                <section class="component-section">
+                    <h2 class="component-subtitle">성격 궁합: 88점</h2>
+                    <div class="card-body">
+                        <p><strong>ESFP(나)</strong>와 <strong>ENTP(상대방)</strong>는 함께 세상을 탐험하는 파트너 같은 관계입니다. 서로에게 엄청난 영감과
+                            에너지를 줄 수 있는 조합이에요!</p>
+                    </div>
+
+                    <h3 class="component-subtitle">Big 5 성격 비교</h3>
+                    <div class="data-vis-item">
+                        <div class="progress-label"><span>외향성</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill primary" style="width: 90%;"></div>
+                        </div>
+                        <div class="progress-bar" style="margin-top: 0.5rem;">
+                            <div class="progress-bar-fill accent" style="width: 80%;"></div>
+                        </div>
+                    </div>
+                    <div class="data-vis-item">
+                        <div class="progress-label"><span>친화성</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill primary" style="width: 80%;"></div>
+                        </div>
+                        <div class="progress-bar" style="margin-top: 0.5rem;">
+                            <div class="progress-bar-fill accent" style="width: 70%;"></div>
+                        </div>
+                    </div>
+                    <div class="data-vis-item">
+                        <div class="progress-label"><span>성실성</span></div>
+                        <div class="progress-bar">
+                            <div class="progress-bar-fill primary" style="width: 60%;"></div>
+                        </div>
+                        <div class="progress-bar" style="margin-top: 0.5rem;">
+                            <div class="progress-bar-fill accent" style="width: 90%;"></div>
+                        </div>
+                    </div>
+
+                    <h3 class="component-subtitle">MBTI 궁합 상세</h3>
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header"><span>관계의 강점</span><i
+                                    class="icon hgi-stroke hgi-arrow-down-02"></i></div>
+                            <div class="accordion-content">
+                                <p>함께 있으면 지루할 틈이 없고, 서로의 장점을 극대화하는 시너지 효과가 있습니다. 새로운 도전을 함께 즐길 수 있습니다.</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header"><span>주의할 점</span><i
+                                    class="icon hgi-stroke hgi-arrow-down-02"></i></div>
+                            <div class="accordion-content">
+                                <p>T(사고)와 F(감정)의 소통 방식 차이로 오해가 생길 수 있습니다. 또한 둘 다 P(인식) 성향이라 마무리가 약해질 수 있습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- 대화 패턴 탭 -->
+            <div id="patterns" class="tab-content">
+                <section class="component-section">
+                    <h2 class="component-subtitle">대화 패턴 분석</h2>
+                    <div class="data-vis-item">
+                        <h4>가장 활발한 대화 시간대</h4>
+                        <div class="bar-chart-container">
+                            <div class="bar-item">
+                                <div class="bar" style="height: 75%; background-color: var(--primary);"></div>
+                                <span class="bar-label">오전</span>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height: 90%; background-color: var(--accent);"></div>
+                                <span class="bar-label">오후</span>
+                            </div>
+                            <div class="bar-item">
+                                <div class="bar" style="height: 85%; background-color: var(--success);"></div>
+                                <span class="bar-label">저녁</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="data-vis-item">
+                        <h4>주요 대화 주제</h4>
+                        <div class="doughnut-chart-container">
+                            <div class="doughnut-chart"
+                                style="background: conic-gradient(var(--primary) 0% 50%, var(--accent) 50% 70%, var(--success) 70% 85%, var(--info) 85% 100%);">
+                            </div>
+                            <div class="doughnut-chart-center"></div>
+                        </div>
+                        <div class="chart-legend">
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--primary);"></div><span>IT/개발
+                                    (50%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--accent);"></div><span>회사/학교
+                                    (20%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--success);"></div><span>재테크
+                                    (15%)</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="legend-color" style="background-color: var(--info);"></div><span>일상
+                                    (15%)</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- AI 솔루션 탭 -->
+            <div id="solution" class="tab-content">
+                <section class="component-section">
+                    <h2 class="component-subtitle">AI 추천 액션 플랜</h2>
+                    <div class="action-card primary">
+                        <h3>공동 프로젝트 보드 만들기</h3>
+                        <p>Trello나 Notion 같은 툴로 프로젝트를 더 체계적으로 관리해보세요. 효율이 2배가 될 거예요!</p>
+                    </div>
+                    <div class="action-card accent">
+                        <h3>IT 외 다른 취미 공유하기</h3>
+                        <p>가끔은 일 생각은 접고 함께 영화를 보거나 맛집을 탐방하며 새로운 활력소를 찾아보세요.</p>
+                    </div>
+
+                    <h3 class="component-subtitle">관계 유지를 위한 팁</h3>
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header"><span>소통 방식 존중하기</span><i
+                                    class="icon hgi-stroke hgi-arrow-down-02"></i></div>
+                            <div class="accordion-content">
+                                <p>상대방은 논리(T)를, 나는 감정(F)을 우선시할 수 있어요. '너는 그렇게 생각하는구나!' 하고 서로의 다름을 인정해주자.</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header"><span>친구로서의 선 지키기</span><i
+                                    class="icon hgi-stroke hgi-arrow-down-02"></i></div>
+                            <div class="accordion-content">
+                                <p>상대방에게 연인이 있다는 사실을 항상 기억하고, 친구이자 파트너로서의 관계에 집중하는 게 중요해.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="cta-footer">
+            <button class="btn btn-gradient">공동 프로젝트 아이디어 얻기</button>
+        </footer>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 페이지 로드 시 다크모드 기본 적용
+            if (!document.body.classList.contains('dark-mode')) {
+                document.body.classList.add('light-mode');
+            }
+
+            const tabs = document.querySelectorAll('.tab-item');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contents.forEach(c => c.classList.remove('active'));
+
+                    tab.classList.add('active');
+                    const targetContentId = tab.dataset.tab;
+                    document.getElementById(targetContentId).classList.add('active');
+                });
+            });
+
+            const accordions = document.querySelectorAll('.accordion-item');
+            accordions.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                const content = item.querySelector('.accordion-content');
+                header.addEventListener('click', () => {
+                    item.classList.toggle('open');
+                    if (item.classList.contains('open')) {
+                        content.style.maxHeight = content.scrollHeight + 'px';
+                    } else {
+                        content.style.maxHeight = null;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

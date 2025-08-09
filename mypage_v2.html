@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIA 마이페이지 (New Design)</title>
+    <!-- Google Fonts (Noto Sans KR) 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Hugeicons CDN 로드 -->
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <style>
+        /* --- CSS 변수 정의 (LIA 디자인 시스템) --- */
+        :root {
+            /* Brand & Accent Colors */
+            --primary: #FF70A6;
+            --accent: #A162F7;
+
+            /* Light Mode Colors */
+            --text-primary-light: #1A1A1A;
+            --text-secondary-light: #3A3A3A;
+            --text-tertiary-light: #718096;
+            --background-color-light: #f8f9fa;
+            --surface-light: #FFFFFF;
+            --border-color-light: #e9ecef;
+            --light-gray-light: #F1F3F5;
+
+            /* Dark Mode Colors */
+            --text-primary-dark: #f8f9fa;
+            --text-secondary-dark: #adb5bd;
+            --text-tertiary-dark: #718096;
+            --background-color-dark: #121212;
+            --surface-dark: #1E1E1E;
+            --border-color-dark: #343a40;
+            --light-gray-dark: #2c2c2e;
+        }
+
+        /* --- 기본 스타일 (라이트 모드 기본값) --- */
+        body {
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --text-tertiary: var(--text-tertiary-light);
+            --background-color: var(--background-color-light);
+            --surface: var(--surface-light);
+            --border-color: var(--border-color-light);
+            --light-gray: var(--light-gray-light);
+
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        /* --- 다크 모드 스타일 --- */
+        body.dark-mode {
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --text-tertiary: var(--text-tertiary-dark);
+            --background-color: var(--background-color-dark);
+            --surface: var(--surface-dark);
+            --border-color: var(--border-color-dark);
+            --light-gray: var(--light-gray-dark);
+        }
+
+        /* --- App Layout --- */
+        .app-container {
+            margin: 0 auto;
+            background-color: var(--surface);
+            min-height: 100vh;
+            padding-bottom: 80px;
+            /* 하단 네비게이션 공간 확보 */
+            transition: background-color 0.3s;
+        }
+
+        .main-content {
+            padding: 1.5rem;
+        }
+
+        h2.section-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            margin: 2rem 0 1rem;
+            padding-left: 0.5rem;
+        }
+
+        /* --- 상단 네비게이션 --- */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background-color: var(--surface);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .top-nav .icon {
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+            cursor: pointer;
+        }
+
+        /* --- 프로필 헤더 --- */
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.5rem 1.5rem;
+            border-bottom: 8px solid var(--light-gray);
+        }
+
+        .avatar {
+            width: 4.5rem;
+            height: 4.5rem;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-info h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .profile-info p {
+            margin: 0.25rem 0 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        /* --- 정보 카드 그리드 --- */
+        .info-card-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card {
+            background-color: var(--light-gray);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            cursor: pointer;
+        }
+
+        .info-card .icon {
+            font-size: 1.5rem;
+        }
+
+        .info-card .icon.primary {
+            color: var(--primary);
+        }
+
+        .info-card .icon.accent {
+            color: var(--accent);
+        }
+
+        .info-card-details h4 {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .info-card-details p {
+            margin: 0.25rem 0 0;
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        /* --- 리스트 뷰 --- */
+        .list-view {
+            border-top: 1px solid var(--border-color);
+        }
+
+        .list-view>.list-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .list-view>.list-item:hover {
+            background-color: var(--light-gray);
+        }
+
+        .list-item .icon {
+            font-size: 1rem;
+            color: var(--text-tertiary);
+        }
+
+        .list-item span {
+            font-weight: 500;
+        }
+
+        .app-info {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .app-info a {
+            color: var(--text-tertiary);
+            text-decoration: underline;
+        }
+
+        /* --- 하단 네비게이션 --- */
+        .bottom-nav-wrapper {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 65px;
+            z-index: 1000;
+        }
+
+        .bottom-nav-bar {
+            display: flex;
+            justify-content: space-around;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--surface);
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--text-tertiary);
+            text-decoration: none;
+            font-size: 0.75rem;
+            flex: 1;
+        }
+
+        .nav-item .icon {
+            font-size: 1.5rem;
+        }
+
+        .nav-item.active .icon,
+        .nav-item.active span {
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 상단 네비게이션 -->
+        <nav class="top-nav">
+            <div style="width: 24px;"></div> <!-- 왼쪽 공간 확보용 -->
+            <h1 class="top-nav-title">마이페이지</h1>
+            <i class="icon hgi-stroke hgi-settings-02"></i>
+        </nav>
+
+        <!-- 프로필 헤더 -->
+        <header class="profile-header">
+            <img src="https://placehold.co/96x96/FFACC7/FFFFFF?text=LIA" alt="내 프로필 아바타" class="avatar">
+            <div class="profile-info">
+                <h3>LIA님</h3>
+                <p>프로필 수정 <i class="icon hgi-stroke hgi-arrow-right-02"
+                        style="font-size: 0.875rem; vertical-align: middle;"></i></p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <!-- 정보 카드 -->
+            <div class="info-card-grid">
+                <div class="info-card">
+                    <i class="icon hgi-stroke hgi-money-bag-01 primary"></i>
+                    <div class="info-card-details">
+                        <h4>보유 코인</h4>
+                        <p>1,200 C</p>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <i class="icon hgi-stroke hgi-coupon accent"></i>
+                    <div class="info-card-details">
+                        <h4>쿠폰함</h4>
+                        <p>3 개</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 나의 활동 메뉴 -->
+            <h2 class="section-title">나의 활동</h2>
+            <section class="list-view">
+                <div class="list-item">
+                    <span>분석 히스토리</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>코칭 내역</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>찜한 전문가</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+            </section>
+
+            <!-- 고객 지원 메뉴 -->
+            <h2 class="section-title">고객 지원</h2>
+            <section class="list-view">
+                <div class="list-item">
+                    <span>공지사항</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>자주 묻는 질문</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+                <div class="list-item">
+                    <span>1:1 문의하기</span>
+                    <i class="icon arrow-icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+            </section>
+
+            <div class="app-info">
+                <p>버전 정보 v1.0.0</p>
+                <p><a href="#">로그아웃</a> | <a href="#">회원탈퇴</a></p>
+            </div>
+
+        </main>
+
+        <!-- 하단 네비게이션 -->
+        <div class="bottom-nav-wrapper">
+            <nav class="bottom-nav-bar">
+                <a href="#" class="nav-item">
+                    <i class="icon hgi-stroke hgi-home-02"></i>
+                    <span>홈</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon hgi-stroke hgi-analytics-02"></i>
+                    <span>분석결과</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon hgi-stroke hgi-edit-02"></i>
+                    <span>코칭센터</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="icon hgi-stroke hgi-heart"></i>
+                    <span>히스토리</span>
+                </a>
+                <a href="#" class="nav-item active">
+                    <i class="icon hgi-stroke hgi-user"></i>
+                    <span>MY</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 페이지 로드 시 다크모드 기본 적용
+            if (!document.body.classList.contains('dark-mode')) {
+                document.body.classList.add('light-mode');
+            }
+        });
+    </script>
+</body>
+
+</html>
