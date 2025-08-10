@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIA 내 정보 수정</title>
+    <!-- Google Fonts (Noto Sans KR) 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <!-- Hugeicons CDN 로드 -->
+    <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
+    <style>
+        /* --- CSS 변수 정의 (LIA 디자인 시스템 기반) --- */
+        :root {
+            --primary: #FF70A6;
+            --accent: #A162F7;
+            --text-primary-light: #1A1A1A;
+            --text-secondary-light: #3A3A3A;
+            --text-tertiary-light: #718096;
+            --background-color-light: #f8f9fa;
+            --surface-light: #FFFFFF;
+            --border-color-light: #e9ecef;
+            --light-gray-light: #F1F3F5;
+            --card-bg-pink-light: #FFF8FB;
+
+            /* 기본 라이트 모드로 설정 */
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --text-tertiary: var(--text-tertiary-light);
+            --background-color: var(--background-color-light);
+            --surface: var(--surface-light);
+            --border-color: var(--border-color-light);
+            --light-gray: var(--light-gray-light);
+        }
+
+        /* --- 기본 스타일 --- */
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        /* --- App Layout --- */
+        .app-container {
+            max-width: 420px;
+            margin: 0 auto;
+            background-color: var(--surface);
+            min-height: 100vh;
+        }
+
+        .main-content {
+            padding: 1.5rem;
+        }
+
+        /* --- 상단 네비게이션 --- */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            background-color: var(--surface);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .top-nav .icon {
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+            cursor: pointer;
+        }
+
+        .top-nav-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .top-nav .action-btn {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        /* --- 폼 섹션 --- */
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .form-description {
+            font-size: 0.875rem;
+            color: var(--text-tertiary);
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* --- 입력 필드 --- */
+        .input-field,
+        .textarea-field {
+            width: 100%;
+            background-color: var(--light-gray);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            box-sizing: border-box;
+            color: var(--text-primary);
+            padding: 0.875rem 1rem;
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .input-field:focus,
+        .textarea-field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 112, 166, 0.2);
+        }
+
+        .textarea-field {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* --- MBTI 선택 --- */
+        .mbti-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--light-gray);
+            border-radius: 0.5rem;
+            padding: 0.875rem 1rem;
+            cursor: pointer;
+        }
+
+        .mbti-selector span {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .mbti-selector .icon {
+            font-size: 1.25rem;
+            color: var(--text-tertiary);
+        }
+
+        /* --- 칩 그룹 --- */
+        .chip-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .chip {
+            padding: 0.6rem 1.25rem;
+            border-radius: 9999px;
+            background-color: var(--light-gray);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .chip.selected {
+            background-color: var(--card-bg-pink-light);
+            color: var(--primary);
+            font-weight: 700;
+            border-color: var(--primary);
+        }
+
+        .chip:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        /* --- MBTI 검사 모달 --- */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background-color: var(--surface);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            width: 90%;
+            max-width: 380px;
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.open .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            margin: 0;
+        }
+
+        .modal-header .close-btn {
+            font-size: 1.5rem;
+            color: var(--text-tertiary);
+            cursor: pointer;
+        }
+
+        .modal-body .btn {
+            width: 100%;
+            padding: 1rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border-color);
+            background-color: var(--light-gray);
+            cursor: pointer;
+            margin-bottom: 0.75rem;
+            transition: all 0.2s ease;
+        }
+
+        .modal-body .btn:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        .survey-question {
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            line-height: 1.5;
+        }
+
+        .survey-progress {
+            width: 100%;
+            height: 6px;
+            background-color: var(--light-gray);
+            border-radius: 3px;
+            margin-bottom: 1.5rem;
+        }
+
+        .survey-progress-bar {
+            width: 0%;
+            height: 100%;
+            background-color: var(--primary);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .survey-result-box {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .survey-result-box .mbti-type {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--primary);
+        }
+
+        .survey-result-box .mbti-desc {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-top: 0.5rem;
+            min-height: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 상단 네비게이션 -->
+        <nav class="top-nav">
+            <i class="icon hgi-stroke hgi-arrow-left-02"></i>
+            <h1 class="top-nav-title">내 정보 수정</h1>
+            <button class="action-btn" onclick="alert('저장되었습니다.')">저장</button>
+        </nav>
+
+        <!-- 메인 컨텐츠 -->
+        <main class="main-content">
+            <!-- 닉네임 섹션 -->
+            <section class="form-section">
+                <label for="nickname" class="form-label">닉네임</label>
+                <input type="text" id="nickname" class="input-field" value="LIA">
+            </section>
+
+            <!-- 성별 섹션 -->
+            <section class="form-section">
+                <label class="form-label">성별</label>
+                <div class="chip-group" id="genderSelection">
+                    <div class="chip">남성</div>
+                    <div class="chip">여성</div>
+                </div>
+            </section>
+
+            <!-- 생년월일 섹션 (수정됨) -->
+            <section class="form-section">
+                <label for="birthdate" class="form-label">생년월일</label>
+                <input type="text" inputmode="numeric" id="birthdate" class="input-field"
+                    placeholder="YYYY.MM.DD 형식으로 입력" maxlength="10">
+            </section>
+
+            <!-- MBTI 섹션 -->
+            <section class="form-section">
+                <label class="form-label">MBTI</label>
+                <div class="mbti-selector" id="mbtiSelector">
+                    <span id="mbtiDisplay">ENFP</span>
+                    <i class="icon hgi-stroke hgi-arrow-right-02"></i>
+                </div>
+            </section>
+
+            <!-- 성격 키워드 섹션 -->
+            <section class="form-section">
+                <label class="form-label">나를 표현하는 키워드</label>
+                <p class="form-description">나를 가장 잘 나타내는 키워드를 선택해주세요. (최대 5개)</p>
+                <div class="chip-group" id="personalityChips">
+                    <div class="chip selected">#활동적인</div>
+                    <div class="chip selected">#열정파</div>
+                    <div class="chip">#감성적인</div>
+                    <div class="chip">#계획적인</div>
+                    <div class="chip">#논리적인</div>
+                    <div class="chip">#유머있는</div>
+                    <div class="chip">#긍정적인</div>
+                    <div class="chip">#신중한</div>
+                    <div class="chip">#사교적인</div>
+                    <div class="chip">#현실적인</div>
+                </div>
+            </section>
+
+            <!-- 관심사 섹션 -->
+            <section class="form-section">
+                <label for="interests" class="form-label">관심사</label>
+                <p class="form-description">AI가 대화 주제를 찾을 때 참고해요.</p>
+                <textarea id="interests" class="textarea-field"
+                    placeholder="예) 영화감상, 맛집탐방, 코딩">고양이, 인디음악, 주말에 카페가서 책읽기</textarea>
+            </section>
+        </main>
+    </div>
+
+    <!-- MBTI 검사 모달 -->
+    <div class="modal-overlay" id="mbtiModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>MBTI 설정</h3>
+                <i class="icon hgi-stroke hgi-close close-btn"></i>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 모달 컨텐츠가 동적으로 채워집니다 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- 성격 키워드 선택 로직 ---
+            const personalityChipContainer = document.getElementById('personalityChips');
+            const maxSelection = 5;
+
+            personalityChipContainer.addEventListener('click', (e) => {
+                const chip = e.target.closest('.chip');
+                if (!chip) return;
+
+                const isSelected = chip.classList.contains('selected');
+                const selectedCount = personalityChipContainer.querySelectorAll('.selected').length;
+
+                if (!isSelected && selectedCount >= maxSelection) {
+                    alert(`키워드는 최대 ${maxSelection}개까지 선택할 수 있습니다.`);
+                    return;
+                }
+                chip.classList.toggle('selected');
+            });
+
+            // --- 성별 선택 로직 ---
+            const genderChipContainer = document.getElementById('genderSelection');
+            genderChipContainer.addEventListener('click', (e) => {
+                const chip = e.target.closest('.chip');
+                if (!chip) return;
+                genderChipContainer.querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+                chip.classList.add('selected');
+            });
+
+            // --- 생년월일 자동 서식 ---
+            const birthdateInput = document.getElementById('birthdate');
+            birthdateInput.addEventListener('input', (e) => {
+                let value = e.target.value.replace(/\D/g, ''); // 숫자 이외의 문자 제거
+                let formattedValue = '';
+
+                if (value.length > 4) {
+                    formattedValue += value.substring(0, 4) + '.';
+                    if (value.length > 6) {
+                        formattedValue += value.substring(4, 6) + '.' + value.substring(6, 8);
+                    } else {
+                        formattedValue += value.substring(4);
+                    }
+                } else {
+                    formattedValue = value;
+                }
+                e.target.value = formattedValue.substring(0, 10); // YYYY.MM.DD (10자)
+            });
+
+
+            // --- MBTI 모달 로직 ---
+            const mbtiModal = document.getElementById('mbtiModal');
+            const mbtiSelector = document.getElementById('mbtiSelector');
+            const modalBody = document.getElementById('modalBody');
+            const mbtiDisplay = document.getElementById('mbtiDisplay');
+
+            const surveyQuestions = [
+                { q: "주말 저녁, 당신의 선택은?", a: [{ t: "친구들과의 약속", v: "E" }, { t: "집에서 혼자만의 시간", v: "I" }] },
+                { q: "처음 만난 사람들과 있을 때 나는", a: [{ t: "먼저 말을 거는 편", v: "E" }, { t: "주로 듣는 편", v: "I" }] },
+                { q: "일을 처리할 때 더 중요한 것은?", a: [{ t: "현실적이고 실제적인 방법", v: "S" }, { t: "새롭고 독창적인 가능성", v: "N" }] },
+                { q: "영화를 볼 때 더 끌리는 것은?", a: [{ t: "탄탄한 스토리와 사실적인 묘사", v: "S" }, { t: "숨겨진 의미와 상징", v: "N" }] },
+                { q: "결정을 내릴 때 기준은?", a: [{ t: "논리적이고 객관적인 사실", v: "T" }, { t: "주변 사람들과의 관계, 나의 감정", v: "F" }] },
+                { q: "친구가 고민을 털어놓을 때 나는", a: [{ t: "문제 해결을 위한 조언을 한다", v: "T" }, { t: "먼저 위로하고 공감해준다", v: "F" }] },
+                { q: "여행을 떠나기 전 나는", a: [{ t: "숙소, 교통, 일정을 다 정해둔다", v: "J" }, { t: "일단 떠나고 본다", v: "P" }] },
+                { q: "갑작스러운 약속이 생겼을 때", a: [{ t: "이미 계획이 있어 불편하다", v: "J" }, { t: "재미있을 것 같아 신난다", v: "P" }] },
+                { q: "나는 '나무'보다 '숲'을 보는 편이다", a: [{ t: "아니다", v: "S" }, { t: "그렇다", v: "N" }] },
+                { q: "정리정돈을 할 때 나는", a: [{ t: "깔끔하게 정리된 상태를 유지한다", v: "J" }, { t: "필요할 때 몰아서 하는 편이다", v: "P" }] },
+            ];
+            let currentQuestionIndex = 0;
+            let userAnswers = [];
+
+            // 모달 열기
+            mbtiSelector.addEventListener('click', () => {
+                renderInitialModal();
+                mbtiModal.classList.add('open');
+            });
+
+            // 모달 닫기
+            mbtiModal.querySelector('.close-btn').addEventListener('click', () => mbtiModal.classList.remove('open'));
+            mbtiModal.addEventListener('click', (e) => {
+                if (e.target === mbtiModal) {
+                    mbtiModal.classList.remove('open');
+                }
+            });
+
+            function renderInitialModal() {
+                modalBody.innerHTML = `
+                    <input type="text" class="input-field" placeholder="MBTI를 직접 입력하세요 (예: ENFP)" id="mbtiDirectInput">
+                    <button class="btn" id="directInputBtn">입력 완료</button>
+                    <p style="text-align:center; color: var(--text-tertiary); margin: 1rem 0;">또는</p>
+                    <button class="btn" id="startSurveyBtn">MBTI 간편 검사 시작하기</button>
+                `;
+                document.getElementById('startSurveyBtn').addEventListener('click', startSurvey);
+                document.getElementById('directInputBtn').addEventListener('click', () => {
+                    const directInput = document.getElementById('mbtiDirectInput').value.toUpperCase();
+                    if (directInput) {
+                        mbtiDisplay.textContent = directInput;
+                        mbtiModal.classList.remove('open');
+                    }
+                });
+            }
+
+            function startSurvey() {
+                currentQuestionIndex = 0;
+                userAnswers = [];
+                renderSurveyQuestion();
+            }
+
+            function renderSurveyQuestion() {
+                const questionData = surveyQuestions[currentQuestionIndex];
+                const progress = ((currentQuestionIndex) / surveyQuestions.length) * 100;
+                modalBody.innerHTML = `
+                    <div class="survey-progress"><div class="survey-progress-bar" style="width: ${progress}%"></div></div>
+                    <p class="survey-question">${currentQuestionIndex + 1}. ${questionData.q}</p>
+                    <button class="btn answer-btn" data-value="${questionData.a[0].v}">${questionData.a[0].t}</button>
+                    <button class="btn answer-btn" data-value="${questionData.a[1].v}">${questionData.a[1].t}</button>
+                `;
+                document.querySelectorAll('.answer-btn').forEach(btn => {
+                    btn.addEventListener('click', handleAnswer);
+                });
+            }
+
+            function handleAnswer(e) {
+                userAnswers.push(e.target.dataset.value);
+                currentQuestionIndex++;
+                if (currentQuestionIndex < surveyQuestions.length) {
+                    renderSurveyQuestion();
+                } else {
+                    calculateResult();
+                }
+            }
+
+            function calculateResult() {
+                const counts = userAnswers.reduce((acc, val) => {
+                    acc[val] = (acc[val] || 0) + 1;
+                    return acc;
+                }, {});
+
+                const result = [
+                    (counts['E'] || 0) > (counts['I'] || 0) ? 'E' : 'I',
+                    (counts['S'] || 0) > (counts['N'] || 0) ? 'S' : 'N',
+                    (counts['T'] || 0) > (counts['F'] || 0) ? 'T' : 'F',
+                    (counts['J'] || 0) > (counts['P'] || 0) ? 'P' : 'J',
+                ].join('');
+
+                modalBody.innerHTML = `
+                    <div class="survey-result-box">
+                        <p style="font-weight: 500;">당신의 성향은...</p>
+                        <h2 class="mbti-type">${result} (예상)</h2>
+                        <p class="mbti-desc">예상 결과입니다. 재미로만 참고해주세요!</p>
+                        <button class="btn" id="useResultBtn" style="margin-top: 1.5rem;">이 결과 사용하기</button>
+                    </div>
+                `;
+                document.getElementById('useResultBtn').addEventListener('click', () => {
+                    mbtiDisplay.textContent = result;
+                    mbtiModal.classList.remove('open');
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

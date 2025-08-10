@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIA 로그인</title>
+    <!-- Google Fonts (Noto Sans KR) 로드 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        /* --- CSS 변수 정의 (LIA 디자인 시스템 기반) --- */
+        :root {
+            --primary: #FF70A6;
+            --accent: #A162F7;
+            --primary-gradient: linear-gradient(to right, #FF70A6, #A162F7);
+            --text-primary-light: #1A1A1A;
+            --text-secondary-light: #3A3A3A;
+            --text-tertiary-light: #718096;
+            --background-color-light: #f8f9fa;
+            --surface-light: #FFFFFF;
+            --border-color-light: #e9ecef;
+
+            /* 기본 라이트 모드로 설정 */
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --text-tertiary: var(--text-tertiary-light);
+            --background-color: var(--background-color-light);
+            --surface: var(--surface-light);
+            --border-color: var(--border-color-light);
+        }
+
+        /* --- 기본 스타일 --- */
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- App Layout --- */
+        .app-container {
+            max-width: 420px;
+            width: 100%;
+            background-color: var(--surface);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 3rem 1.5rem;
+        }
+
+        /* --- 환영 메시지 --- */
+        .welcome-section {
+            text-align: center;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .app-logo {
+            font-weight: 900;
+            font-size: 2.5rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .welcome-section p {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin: 0;
+        }
+
+        /* --- 소셜 로그인 버튼 --- */
+        .social-login-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.875rem 1.5rem;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .social-btn:active {
+            transform: scale(0.98);
+            filter: brightness(0.95);
+        }
+
+        .social-btn .icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 0.75rem;
+        }
+
+        /* 각 소셜 버튼 스타일 */
+        .btn-kakao {
+            background-color: #FEE500;
+            color: #191919;
+        }
+
+        .btn-google {
+            background-color: #FFFFFF;
+            color: #191919;
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-apple {
+            background-color: #000000;
+            color: #FFFFFF;
+        }
+
+        /* --- 하단 안내 문구 --- */
+        .footer-section {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .footer-section p {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            line-height: 1.5;
+        }
+
+        .footer-section a {
+            color: var(--text-tertiary);
+            font-weight: 500;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- 환영 메시지 섹션 -->
+        <div class="welcome-section">
+            <div class="app-logo">LIA</div>
+            <h1>AI로 만드는 설레는 대화</h1>
+            <p>간편하게 로그인하고 시작해보세요</p>
+        </div>
+
+        <!-- 소셜 로그인 버튼 섹션 -->
+        <div class="social-login-section">
+            <button class="social-btn btn-kakao" onclick="handleLogin('kakao')">
+                <svg class="icon" viewBox="0 0 32 32">
+                    <path fill="currentColor"
+                        d="M16 4.64c-6.96 0-12.64 4.48-12.64 10.08 0 3.52 2.32 6.64 5.76 8.48l-1.92 7.2 7.68-4.08c.4 0 .72.08 1.12.08 6.96 0 12.64-4.48 12.64-10.08S22.96 4.64 16 4.64z">
+                    </path>
+                </svg>
+                카카오로 시작하기
+            </button>
+            <button class="social-btn btn-google" onclick="handleLogin('google')">
+                <svg class="icon" viewBox="0 0 48 48">
+                    <path fill="#FFC107"
+                        d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8c-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C12.955 4 4 12.955 4 24s8.955 20 20 20s20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z">
+                    </path>
+                    <path fill="#FF3D00"
+                        d="m6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4C16.318 4 9.656 8.337 6.306 14.691z">
+                    </path>
+                    <path fill="#4CAF50"
+                        d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238A11.91 11.91 0 0 1 24 36c-5.222 0-9.612-3.512-11.284-8.28l-6.573 4.818C9.656 39.663 16.318 44 24 44z">
+                    </path>
+                    <path fill="#1976D2"
+                        d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.082 5.571l.003-.002l6.19 5.238C39.902 35.636 44 29.596 44 24c0-1.341-.138-2.65-.389-3.917z">
+                    </path>
+                </svg>
+                Google로 시작하기
+            </button>
+            <button class="social-btn btn-apple" onclick="handleLogin('apple')">
+                <svg class="icon" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                        d="M19.62 16.89a6.63 6.63 0 0 1-2.29.62c-1.2 0-1.91-.71-3.41-.71c-1.53 0-2.32.7-3.47.7a6.4 6.4 0 0 1-2.47-.65c-1.6-.7-2.61-2.47-2.61-4.69c0-2.88 2.06-5.23 4.2-5.23c1.19 0 2.11.66 3.2.66c1.06 0 2.29-.75 3.65-.75c2.11 0 3.89 2.17 3.89 5.15c0 1.93-.8 3.58-2.28 4.62M15.37 6.09c.73-.89 1.2-2.14 1.05-3.33c-.9.12-2.08.78-2.84 1.62c-.68.75-1.23 2-1.05 3.18c1.02.18 2.16-.62 2.84-1.47Z">
+                    </path>
+                </svg>
+                Apple로 시작하기
+            </button>
+        </div>
+
+        <!-- 하단 안내 문구 섹션 -->
+        <div class="footer-section">
+            <p>로그인은 <a href="#">이용약관</a> 및 <a href="#">개인정보처리방침</a>에<br>동의하는 것으로 간주됩니다.</p>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(provider) {
+            // 실제 앱에서는 각 소셜 로그인 SDK를 호출하는 로직이 들어갑니다.
+            alert(provider + ' 계정으로 로그인을 시도합니다.');
+        }
+    </script>
+</body>
+
+</html>
